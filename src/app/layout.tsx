@@ -4,6 +4,8 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CartProvider } from "@/components/CartProvider";
+import { Analytics } from "@/components/Analytics";
+import { SiteJsonLd } from "@/components/SiteJsonLd";
 import { site } from "@/lib/site";
 
 const hanken = Hanken_Grotesk({
@@ -55,11 +57,13 @@ export default function RootLayout({
       className={`${hanken.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="industrial-grid flex min-h-full flex-col bg-surface text-on-surface">
+        <SiteJsonLd />
         <CartProvider>
           <Header />
           <main className="flex-1 pt-20">{children}</main>
           <Footer />
         </CartProvider>
+        <Analytics />
       </body>
     </html>
   );

@@ -29,9 +29,25 @@ npm run dev          # http://localhost:3000
 | `/industries`        | Industries served with recommended bags                 |
 | `/calculator`        | FIBC dimension calculator (live height/volume from density + payload) |
 | `/custom-quote`      | Multi-section custom quote request form (prefills from a product) |
-| `/quote-list`        | Saved bags → submit a consolidated volume-quote request |
+| `/quote-list`        | Quote-to-order flow: saved bags + shipping/PO/delivery → order request with reference number |
+| `/resources`         | FIBC guides & articles (`/resources/[slug]`, SSG, Article JSON-LD) |
 | `/about`             | Company story, stats, certifications, contact           |
-| `/api/quote`         | Validates and captures all quote/contact submissions     |
+| `/contact`           | Contact details, embedded map, and contact form         |
+| `/api/quote`         | Validates and captures quote/contact submissions (email + log) |
+| `/api/order`         | Order requests — validates, emails, returns a reference number |
+| `/sitemap.xml`, `/robots.txt` | Generated SEO metadata routes                  |
+
+## Configuration
+
+Copy `.env.example` to `.env.local`. Everything is optional — the app runs
+without any env vars (forms log to the server; analytics stays off).
+
+| Variable             | Purpose                                              |
+| -------------------- | ---------------------------------------------------- |
+| `RESEND_API_KEY`     | Enables real email delivery of leads via Resend      |
+| `LEAD_INBOX`         | Inbox for leads (default `info@texasbulkbags.com`)   |
+| `EMAIL_FROM`         | Verified Resend sender                               |
+| `NEXT_PUBLIC_GA_ID`  | Google Analytics 4 ID; analytics load only when set  |
 
 ## Project structure
 

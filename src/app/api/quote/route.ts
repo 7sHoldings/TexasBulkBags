@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sendLeadEmail } from "@/lib/email";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -9,6 +10,19 @@ type QuotePayload = {
   website?: string;
   [key: string]: unknown;
 };
+
+function formatLead(lead: Record<string, unknown>): string {
+  return Object.entries(lead)
+    .map(([key, value]) => {
+      const label = key.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase());
+      const printed =
+        value && typeof value === "object"
+          ? JSON.stringify(value, null, 2)
+          : String(value ?? "—");
+      return `${label}: ${printed}`;
+    })
+    .join("\n");
+}
 
 export async function POST(request: Request) {
   let payload: QuotePayload;
@@ -37,17 +51,18 @@ export async function POST(request: Request) {
     );
   }
 
-  const lead = {
-    ...payload,
-    name,
-    email,
-    receivedAt: new Date().toISOString(),
-  };
+  const { website: _omit, ...rest } = payload;
+  void _omit;
+  const lead = { ...rest, name, email, receivedAt: new Date().toISOString() };
+  const kind = String(payload.type ?? "quote");
 
-  // TODO: deliver to info@texasbulkbags.com via an email/CRM provider
-  // (e.g. Resend, SendGrid, or HubSpot). Wire the API key via env vars and
-  // replace this log. The submission is captured in server output for now.
-  console.info("[quote] New lead:", JSON.stringify(lead, null, 2));
+  const text = formatLead(lead);
+  console.info(`[quote] New ${kind} lead:\n${text}`);
+  await sendLeadEmail({
+    subject: `New ${kind} request — ${name}`,
+    text,
+    replyTo: email,
+  });
 
   return NextResponse.json({ ok: true });
 }

@@ -15,7 +15,9 @@ export const nav = [
   { label: "Bulk Bags", href: "/products" },
   { label: "Industries", href: "/industries" },
   { label: "Calculator", href: "/calculator" },
+  { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const certifications = [

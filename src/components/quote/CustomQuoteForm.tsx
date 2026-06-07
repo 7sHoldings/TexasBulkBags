@@ -108,6 +108,15 @@ export function CustomQuoteForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Honeypot */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        className="hidden"
+        aria-hidden="true"
+      />
       {prefill && (
         <div className="flex items-center gap-2 border border-secondary bg-secondary/5 px-4 py-3 text-body-sm text-primary">
           <Icon name="info" className="text-secondary" />
