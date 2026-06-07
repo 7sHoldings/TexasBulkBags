@@ -3,6 +3,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductImage } from "@/components/ui/ProductImage";
 import { certifications, site } from "@/lib/site";
 import { products } from "@/lib/products";
 import { industries } from "@/lib/industries";
@@ -69,7 +70,8 @@ export default function Home() {
               href="/products"
               className="group relative flex flex-col justify-end overflow-hidden border border-industrial-gray bg-surface-container p-8 hard-shadow md:col-span-8 md:row-span-2"
             >
-              <div className="industrial-grid absolute inset-0 opacity-40" />
+              <ProductImage className="absolute inset-0" />
+              <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent" />
               <div className="relative z-10">
                 <span className="mb-4 inline-block bg-secondary px-2 py-1 text-[10px] font-bold uppercase text-on-secondary">
                   Bestseller
