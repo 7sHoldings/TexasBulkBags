@@ -1,31 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
-}
+@theme {
+  /* ===== Industrial Integrity palette ===== */
+  --color-primary: #0a1a2f; /* deep navy — headlines, primary surfaces */
+  --color-on-primary: #ffffff;
+  --color-primary-container: #0c1c31;
+  --color-on-primary-container: #a9b6cc;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-secondary: #bb0014; /* safety red — CTAs, accents */
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #e51d24;
+  --color-secondary-fixed: #ffb4ac;
 
-  /* Brand palette */
-  --color-brand-50: #fdf6ec;
-  --color-brand-100: #f9e6c8;
-  --color-brand-200: #f2cb8c;
-  --color-brand-300: #e8aa4f;
-  --color-brand-400: #dd8f29;
-  --color-brand-500: #c5731a;
-  --color-brand-600: #a85a14;
-  --color-brand-700: #874415;
-  --color-brand-800: #6e3717;
-  --color-brand-900: #5c2f16;
+  --color-slate-dark: #1e293b;
 
-  --color-ink-700: #2b2b2b;
-  --color-ink-800: #1f1f1f;
-  --color-ink-900: #141414;
+  --color-surface: #f7f9fb;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f4f6;
+  --color-surface-container: #eceef0;
+  --color-surface-container-high: #e6e8ea;
+  --color-surface-container-highest: #e0e3e5;
+
+  --color-on-surface: #191c1e;
+  --color-on-surface-variant: #44474d;
+
+  --color-industrial-gray: #e2e8f0;
+  --color-outline: #75777d;
+  --color-outline-variant: #c5c6cd;
+
+  --color-success-green: #166534;
+  --color-warning-amber: #b45309;
+  --color-error-red: #991b1b;
+
+  /* ===== Type (next/font variables wired in layout.tsx) ===== */
+  --font-display: var(--font-hanken), "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --text-headline-xl: 48px;
+  --text-headline-xl--line-height: 56px;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-xl--font-weight: 800;
+
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 40px;
+  --text-headline-lg--letter-spacing: -0.01em;
+  --text-headline-lg--font-weight: 700;
+
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 32px;
+  --text-headline-md--font-weight: 700;
+
+  --text-headline-sm: 20px;
+  --text-headline-sm--line-height: 28px;
+  --text-headline-sm--font-weight: 600;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+
+  --text-label-bold: 12px;
+  --text-label-bold--line-height: 16px;
+  --text-label-bold--letter-spacing: 0.05em;
+  --text-label-bold--font-weight: 700;
+
+  --text-mono-spec: 13px;
+  --text-mono-spec--line-height: 18px;
+  --text-mono-spec--font-weight: 500;
 }
 
 html {
@@ -33,7 +79,41 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-sans);
+}
+
+/* Display font for headings */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: var(--font-display);
+}
+
+/* ===== Industrial utilities ===== */
+.industrial-grid {
+  background-image: radial-gradient(var(--color-industrial-gray) 0.5px, transparent 0.5px);
+  background-size: 24px 24px;
+}
+
+.hard-shadow {
+  box-shadow: 4px 4px 0px 0px rgba(10, 26, 47, 0.06);
+}
+
+/* Material Symbols icon font defaults */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }

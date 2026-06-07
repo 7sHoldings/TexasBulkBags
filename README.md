@@ -1,22 +1,16 @@
 # Texas Bulk Bags
 
-Marketing / lead-generation website for **Texas Bulk Bags**, a Texas-based
-supplier of FIBC bulk bags (super sacks) for agriculture, construction, and
-industrial use.
-
-Built with [Next.js](https://nextjs.org) (App Router), TypeScript, and
-Tailwind CSS v4.
+Industrial FIBC bulk-bag catalog and lead-generation site for **Texas Bulk
+Bags** (Kerens, TX). Built with **Next.js (App Router) + TypeScript + Tailwind
+CSS v4**, implementing the **"Industrial Integrity"** design system (navy +
+safety-red, Hanken Grotesk / Inter, Material Symbols).
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev
+npm run dev          # http://localhost:3000
 ```
-
-Open [http://localhost:3000](http://localhost:3000) to view the site.
-
-## Available scripts
 
 | Command         | Description                          |
 | --------------- | ------------------------------------ |
@@ -25,35 +19,61 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 | `npm run start` | Serve the production build           |
 | `npm run lint`  | Run ESLint                           |
 
+## Pages
+
+| Route                | Description                                              |
+| -------------------- | ------------------------------------------------------- |
+| `/`                  | Home — hero, trust bar, core configurations, best sellers, industries, custom-quote CTA |
+| `/products`          | Catalog with faceted filters (top style, construction, SWL, specialty), sort, active chips |
+| `/products/[slug]`   | Product detail — gallery, spec table, add-to-quote-list, request bulk quote (SSG, JSON-LD) |
+| `/industries`        | Industries served with recommended bags                 |
+| `/calculator`        | FIBC dimension calculator (live height/volume from density + payload) |
+| `/custom-quote`      | Multi-section custom quote request form (prefills from a product) |
+| `/quote-list`        | Saved bags → submit a consolidated volume-quote request |
+| `/about`             | Company story, stats, certifications, contact           |
+| `/api/quote`         | Validates and captures all quote/contact submissions     |
+
 ## Project structure
 
 ```
 src/
 ├── app/
-│   ├── api/quote/route.ts   # Quote-request form handler
-│   ├── layout.tsx           # Root layout, header/footer, SEO metadata
-│   ├── page.tsx             # Home page (assembles sections)
-│   └── globals.css          # Tailwind + brand design tokens
-├── components/              # Header, Footer, Hero, Products, Features,
-│                            # About, QuoteForm
-└── lib/site.ts              # Central site content (nav, products, contact)
+│   ├── layout.tsx            # Fonts, header/footer, cart provider, SEO
+│   ├── globals.css           # Design tokens (Industrial Integrity) + utilities
+│   ├── page.tsx              # Home
+│   ├── products/             # Catalog + [slug] detail
+│   ├── industries/ about/ calculator/ custom-quote/ quote-list/
+│   └── api/quote/route.ts    # Lead handler (honeypot + validation)
+├── components/
+│   ├── Header / Footer / NewsletterForm / ProductCard / CartProvider
+│   ├── ui/                   # Button, Icon, ProductImage, SectionHeading
+│   ├── catalog/ product/ quote/ calculator/
+└── lib/
+    ├── site.ts               # Company info, nav, certifications
+    ├── products.ts           # Catalog data model + facets
+    └── industries.ts         # Industries data
 ```
 
-## Editing content
+## Content & data
 
-Most site copy — navigation, products, features, and contact details — lives in
-[`src/lib/site.ts`](src/lib/site.ts). Update that file to change what appears on
-the page without touching component markup.
+- **Company info / nav** — `src/lib/site.ts`
+- **Products (SKUs, specs, prices)** — `src/lib/products.ts` (currently realistic
+  sample data; replace with the real SKU/price list)
+- **Industries** — `src/lib/industries.ts`
 
-## Quote form
+## Quote handling
 
-The "Request a Quote" form posts to `POST /api/quote`. The handler validates the
-submission and currently logs the lead to the server console. To deliver leads,
-integrate an email or CRM provider (e.g. Resend, SendGrid, or HubSpot) where the
-`TODO` is marked in [`src/app/api/quote/route.ts`](src/app/api/quote/route.ts).
+All forms (custom quote, quote-list, contact) POST to `/api/quote`, which
+validates name + email, drops honeypot spam, and logs the lead. **To deliver
+leads to `info@texasbulkbags.com`**, wire an email/CRM provider (Resend,
+SendGrid, HubSpot) where the `TODO` is marked in
+`src/app/api/quote/route.ts`.
 
-## Deployment
+## Not yet wired (next steps)
 
-This app deploys cleanly to any Node.js host or to
-[Vercel](https://vercel.com). Run `npm run build` to verify a production build
-before deploying.
+- Real product photography (placeholders are in place)
+- Logo asset (currently a wordmark)
+- Email/CRM delivery for leads
+- Online payments / checkout (Phase 2 — see `docs/REQUIREMENTS.md`)
+
+See [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) for full scope and phasing.

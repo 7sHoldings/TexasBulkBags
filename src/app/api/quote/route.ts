@@ -1,17 +1,14 @@
 import { NextResponse } from "next/server";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 type QuotePayload = {
   name?: string;
   email?: string;
-  company?: string;
-  phone?: string;
-  product?: string;
-  quantity?: string;
-  timeline?: string;
-  message?: string;
+  // Honeypot — should always be empty for real users.
+  website?: string;
+  [key: string]: unknown;
 };
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(request: Request) {
   let payload: QuotePayload;
@@ -22,13 +19,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  const name = payload.name?.trim();
-  const email = payload.email?.trim();
+  // Spam honeypot: silently accept but drop.
+  if (payload.website) {
+    return NextResponse.json({ ok: true });
+  }
+
+  const name = String(payload.name ?? "").trim();
+  const email = String(payload.email ?? "").trim();
 
   if (!name) {
     return NextResponse.json({ error: "Name is required." }, { status: 400 });
   }
-
   if (!email || !EMAIL_RE.test(email)) {
     return NextResponse.json(
       { error: "A valid email is required." },
@@ -36,19 +37,17 @@ export async function POST(request: Request) {
     );
   }
 
-  // TODO: integrate with email/CRM (e.g. Resend, SendGrid, HubSpot).
-  // For now we log the lead so it is captured in server output.
-  console.info("New quote request:", {
+  const lead = {
+    ...payload,
     name,
     email,
-    company: payload.company?.trim() || null,
-    phone: payload.phone?.trim() || null,
-    product: payload.product?.trim() || null,
-    quantity: payload.quantity?.trim() || null,
-    timeline: payload.timeline?.trim() || null,
-    message: payload.message?.trim() || null,
     receivedAt: new Date().toISOString(),
-  });
+  };
+
+  // TODO: deliver to info@texasbulkbags.com via an email/CRM provider
+  // (e.g. Resend, SendGrid, or HubSpot). Wire the API key via env vars and
+  // replace this log. The submission is captured in server output for now.
+  console.info("[quote] New lead:", JSON.stringify(lead, null, 2));
 
   return NextResponse.json({ ok: true });
 }

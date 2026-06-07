@@ -2,87 +2,88 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { nav, site } from "@/lib/site";
+import { useCart } from "@/components/CartProvider";
+import { Icon } from "@/components/ui/Icon";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const { count } = useCart();
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-brand-600 font-bold text-white">
-            TB
-          </span>
-          <span className="text-lg font-semibold tracking-tight text-ink-900">
-            {site.name}
-          </span>
-        </Link>
-
-        <nav className="hidden items-center gap-8 md:flex">
-          {nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-ink-700 transition-colors hover:text-brand-600"
-            >
-              {item.label}
-            </a>
-          ))}
-          <a
-            href="#quote"
-            className="rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
-          >
-            Request a Quote
-          </a>
-        </nav>
-
+    <header className="fixed top-0 z-50 flex h-20 w-full items-center justify-between border-b border-industrial-gray bg-surface-container-lowest px-margin-mobile md:px-8">
+      <div className="flex items-center gap-4">
         <button
           type="button"
-          aria-label="Toggle navigation menu"
+          aria-label="Toggle navigation"
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center justify-center rounded-md p-2 text-ink-800 md:hidden"
+          className="text-secondary md:hidden"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {open ? (
-              <>
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </>
-            ) : (
-              <>
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </>
-            )}
-          </svg>
+          <Icon name={open ? "close" : "menu"} className="text-3xl" />
         </button>
+        <Link
+          href="/"
+          className="font-display text-headline-sm font-extrabold uppercase tracking-tight text-primary"
+        >
+          {site.name}
+        </Link>
+      </div>
+
+      <nav className="hidden h-full items-center gap-8 md:flex">
+        {nav.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`flex h-full items-center text-label-bold font-bold uppercase tracking-widest transition-colors ${
+              isActive(item.href)
+                ? "border-b-2 border-secondary text-secondary"
+                : "text-on-surface-variant hover:text-secondary"
+            }`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="flex items-center gap-3">
+        <Link
+          href="/quote-list"
+          aria-label="Quote list"
+          className="relative flex items-center text-primary hover:text-secondary"
+        >
+          <Icon name="shopping_cart" className="text-2xl" />
+          {count > 0 && (
+            <span className="absolute -right-2 -top-2 flex h-5 min-w-5 items-center justify-center rounded-full bg-secondary px-1 text-[11px] font-bold text-on-secondary">
+              {count}
+            </span>
+          )}
+        </Link>
+        <Link
+          href="/custom-quote"
+          className="bg-secondary px-6 py-3 font-display text-label-bold uppercase tracking-widest text-on-secondary transition-colors hover:bg-secondary-container"
+        >
+          Get a Quote
+        </Link>
       </div>
 
       {open && (
-        <nav className="border-t border-black/5 bg-white md:hidden">
-          <div className="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-6">
+        <nav className="absolute left-0 top-20 w-full border-b border-industrial-gray bg-surface-container-lowest md:hidden">
+          <div className="flex flex-col px-margin-mobile py-2">
             {nav.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="py-2 text-sm font-medium text-ink-700 hover:text-brand-600"
+                className="py-3 text-label-bold font-bold uppercase tracking-widest text-on-surface-variant hover:text-secondary"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </div>
         </nav>
