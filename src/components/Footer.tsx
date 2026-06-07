@@ -2,14 +2,13 @@ import Link from "next/link";
 import { nav, site } from "@/lib/site";
 import { Icon } from "@/components/ui/Icon";
 import { NewsletterForm } from "@/components/NewsletterForm";
+import { Logo } from "@/components/ui/Logo";
 
 export function Footer() {
   return (
     <footer className="grid w-full grid-cols-1 gap-8 border-t-4 border-secondary bg-primary-container px-margin-mobile py-12 md:grid-cols-4 md:px-8">
       <div className="space-y-6">
-        <h4 className="font-display text-headline-sm font-extrabold uppercase tracking-tight text-surface-container-lowest">
-          {site.name}
-        </h4>
+        <Logo onDark />
         <div className="space-y-2 text-body-sm text-on-primary-container">
           <p className="flex items-center gap-2">
             <Icon name="location_on" className="text-base" />

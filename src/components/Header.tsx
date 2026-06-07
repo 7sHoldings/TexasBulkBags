@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { nav, site } from "@/lib/site";
+import { nav } from "@/lib/site";
 import { useCart } from "@/components/CartProvider";
 import { Icon } from "@/components/ui/Icon";
+import { Logo } from "@/components/ui/Logo";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -27,12 +28,7 @@ export function Header() {
         >
           <Icon name={open ? "close" : "menu"} className="text-3xl" />
         </button>
-        <Link
-          href="/"
-          className="font-display text-headline-sm font-extrabold uppercase tracking-tight text-primary"
-        >
-          {site.name}
-        </Link>
+        <Logo />
       </div>
 
       <nav className="hidden h-full items-center gap-8 md:flex">
