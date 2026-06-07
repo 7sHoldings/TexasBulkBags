@@ -112,7 +112,11 @@ export default async function ProductDetailPage({
                 <Icon name="check_circle" className="text-sm" filled /> {product.badge}
               </span>
             )}
-            <ProductImage className="aspect-[4/3]" />
+            <ProductImage
+              className="aspect-[4/3]"
+              src={product.image}
+              alt={product.name}
+            />
           </div>
           <div className="mt-4 grid grid-cols-4 gap-4">
             {[0, 1, 2, 3].map((i) => (

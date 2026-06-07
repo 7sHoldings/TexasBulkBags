@@ -27,6 +27,9 @@ export type Product = {
   liftLoops: string;
   uvProtection: string;
   priceFrom: number; // per unit USD
+  /** Optional real photo (e.g. "/products/tbb-up-35.jpg"). Falls back to an
+   *  illustrated placeholder when omitted. */
+  image?: string;
 };
 
 export const products: Product[] = [
