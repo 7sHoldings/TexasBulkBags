@@ -18,7 +18,7 @@ export function Header() {
 
   return (
     <header className="fixed top-0 z-50 flex h-20 w-full items-center justify-between border-b border-industrial-gray bg-surface-container-lowest px-margin-mobile md:px-8">
-      <div className="flex items-center gap-4">
+      <div className="flex min-w-0 items-center gap-2 sm:gap-4">
         <button
           type="button"
           aria-label="Toggle navigation"
@@ -62,9 +62,10 @@ export function Header() {
         </Link>
         <Link
           href="/custom-quote"
-          className="bg-secondary px-6 py-3 font-display text-label-bold uppercase tracking-widest text-on-secondary transition-colors hover:bg-secondary-container"
+          className="whitespace-nowrap bg-secondary px-3 py-2.5 font-display text-label-bold uppercase tracking-widest text-on-secondary transition-colors hover:bg-secondary-container sm:px-6 sm:py-3"
         >
-          Get a Quote
+          <span className="sm:hidden">Quote</span>
+          <span className="hidden sm:inline">Get a Quote</span>
         </Link>
       </div>
 

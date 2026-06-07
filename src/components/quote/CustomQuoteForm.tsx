@@ -244,7 +244,7 @@ export function CustomQuoteForm() {
                   key={opt}
                   type="button"
                   onClick={() => setSwl(opt)}
-                  className={`py-3 text-body-sm font-bold ${
+                  className={`whitespace-nowrap px-1 py-3 text-[11px] font-bold sm:text-body-sm ${
                     i > 0 ? "border-l border-industrial-gray" : ""
                   } ${
                     swl === opt

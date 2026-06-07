@@ -24,18 +24,18 @@ export function Logo({
         width={44}
         height={44}
         priority
-        className="h-11 w-11 object-contain"
+        className="h-9 w-9 shrink-0 object-contain sm:h-11 sm:w-11"
       />
       <span className="flex flex-col leading-none">
         <span
-          className={`font-display text-xl font-extrabold uppercase leading-none tracking-tight ${
+          className={`font-display text-base font-extrabold uppercase leading-none tracking-tight sm:text-xl ${
             onDark ? "text-white" : "text-primary"
           }`}
         >
           Texas
         </span>
         <span
-          className={`mt-0.5 font-display text-[10px] font-bold uppercase leading-none tracking-[0.22em] ${
+          className={`mt-0.5 font-display text-[9px] font-bold uppercase leading-none tracking-[0.18em] sm:text-[10px] sm:tracking-[0.22em] ${
             onDark ? "text-on-primary-container" : "text-on-surface-variant"
           }`}
         >
