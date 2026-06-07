@@ -30,6 +30,31 @@ export default function ResourcesPage() {
         </p>
       </div>
 
+      {/* Guides & tools */}
+      <div className="mb-12 grid grid-cols-1 gap-px overflow-hidden border border-industrial-gray bg-industrial-gray sm:grid-cols-2 lg:grid-cols-4">
+        {[
+          { href: "/resources/faq", icon: "info", title: "FAQ", desc: "Common questions answered." },
+          { href: "/resources/glossary", icon: "description", title: "FIBC Glossary", desc: "Bulk bag terms explained." },
+          { href: "/resources/food-safety", icon: "shield", title: "Food Safety Guide", desc: "Food-grade bag standards." },
+          { href: "/calculator", icon: "analytics", title: "Dimension Calculator", desc: "Size a bag by payload." },
+        ].map((t) => (
+          <Link
+            key={t.href}
+            href={t.href}
+            className="group bg-white p-6 transition-colors hover:bg-surface-container-low"
+          >
+            <Icon name={t.icon} className="text-3xl text-secondary" />
+            <h2 className="mt-3 font-display text-headline-sm uppercase text-primary group-hover:text-secondary">
+              {t.title}
+            </h2>
+            <p className="mt-1 text-body-sm text-on-surface-variant">{t.desc}</p>
+          </Link>
+        ))}
+      </div>
+
+      <h2 className="mb-6 border-l-8 border-secondary pl-6 font-display text-headline-lg uppercase text-primary">
+        Articles & Guides
+      </h2>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {articles.map((a) => (
           <Link

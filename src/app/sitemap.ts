@@ -14,6 +14,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/calculator",
     "/custom-quote",
     "/resources",
+    "/resources/faq",
+    "/resources/glossary",
+    "/resources/food-safety",
     "/about",
     "/contact",
   ].map((path) => ({
