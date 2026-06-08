@@ -84,7 +84,7 @@ export function CustomQuoteForm() {
 
   if (status === "success") {
     return (
-      <div className="border border-industrial-gray bg-white p-12 text-center hard-shadow">
+      <div className="border border-industrial-gray bg-white p-8 text-center hard-shadow sm:p-12">
         <div className="mx-auto flex h-16 w-16 items-center justify-center bg-secondary">
           <Icon name="check" className="text-4xl text-white" />
         </div>
@@ -108,6 +108,15 @@ export function CustomQuoteForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Honeypot */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        className="hidden"
+        aria-hidden="true"
+      />
       {prefill && (
         <div className="flex items-center gap-2 border border-secondary bg-secondary/5 px-4 py-3 text-body-sm text-primary">
           <Icon name="info" className="text-secondary" />
@@ -235,7 +244,7 @@ export function CustomQuoteForm() {
                   key={opt}
                   type="button"
                   onClick={() => setSwl(opt)}
-                  className={`py-3 text-body-sm font-bold ${
+                  className={`whitespace-nowrap px-1 py-3 text-[11px] font-bold sm:text-body-sm ${
                     i > 0 ? "border-l border-industrial-gray" : ""
                   } ${
                     swl === opt
@@ -340,7 +349,7 @@ export function CustomQuoteForm() {
           </div>
           <div>
             <Label>Technical Drawings (optional)</Label>
-            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 border-2 border-dashed border-industrial-gray bg-surface-container-low p-8 text-center hover:border-primary">
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 border-2 border-dashed border-industrial-gray bg-surface-container-low p-6 text-center sm:p-8 hover:border-primary">
               <Icon name="cloud_upload" className="text-3xl text-outline" />
               <span className="text-body-sm text-on-surface-variant">
                 {fileName ?? "Drag & drop or browse — PDF, DXF, JPG up to 25MB"}

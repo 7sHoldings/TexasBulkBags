@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { certifications, site } from "@/lib/site";
 import { Icon } from "@/components/ui/Icon";
 import { ButtonLink } from "@/components/ui/Button";
@@ -26,6 +27,16 @@ export default function AboutPage() {
         <h1 className="mt-2 font-display text-headline-xl uppercase text-primary">
           A Texas Supplier That Knows Bulk Handling
         </h1>
+      </div>
+
+      <div className="mb-12 flex items-center justify-center border border-industrial-gray bg-white p-8 hard-shadow sm:p-12">
+        <Image
+          src="/logo-full.jpg"
+          alt="Texas Bulk Bags logo"
+          width={1280}
+          height={853}
+          className="h-auto w-full max-w-md"
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">

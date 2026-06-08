@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
+  bagOptions,
+  getCategory,
   getProduct,
   products,
   relatedProducts,
@@ -35,18 +37,31 @@ function specRows(p: Product) {
   return [
     { label: "Base Dimensions", value: p.dimensions },
     { label: "Construction", value: p.construction },
+    {
+      label: "Safe Working Load (5:1)",
+      value: `${p.swl.toLocaleString()} lbs`,
+    },
+    p.swl6
+      ? { label: "Safe Working Load (6:1)", value: `${p.swl6.toLocaleString()} lbs` }
+      : null,
+    p.volumeFt3
+      ? {
+          label: "Volume",
+          value: `${p.volumeFt3} ft³ (${p.volumeM3} m³)`,
+        }
+      : null,
+    { label: "Rated Safety Factor", value: p.safetyFactor },
+    p.staticType !== "Type A"
+      ? { label: "Static Type", value: p.staticType }
+      : null,
+    p.unCertified ? { label: "UN Certified", value: "Yes" } : null,
+    p.foodGrade ? { label: "Food Grade", value: "Yes" } : null,
     { label: "Top Style", value: p.topStyle },
     { label: "Bottom Style", value: p.bottomStyle },
-    { label: "Safe Working Load", value: `${p.swl.toLocaleString()} lbs` },
-    { label: "Safety Factor", value: p.safetyFactor },
-    { label: "Static Type", value: p.staticType },
     { label: "Fabric", value: p.fabric },
-    { label: "Coating", value: p.coated ? "Coated (laminated)" : "Uncoated" },
     { label: "Lift Loops", value: p.liftLoops },
     { label: "UV Protection", value: p.uvProtection },
-    { label: "Food Grade", value: p.foodGrade ? "Yes" : "No" },
-    { label: "UN Certified", value: p.unCertified ? "Yes" : "No" },
-  ];
+  ].filter((r): r is { label: string; value: string } => r !== null);
 }
 
 export default async function ProductDetailPage({
@@ -58,6 +73,7 @@ export default async function ProductDetailPage({
   const product = getProduct(slug);
   if (!product) notFound();
 
+  const category = getCategory(product.category);
   const related = relatedProducts(slug, 4);
   const attributes = [
     { icon: "dashboard", label: product.construction },
@@ -100,6 +116,10 @@ export default async function ProductDetailPage({
           Bulk Bags
         </Link>
         <Icon name="chevron_right" className="text-sm" />
+        <Link href={`/products#${product.category}`} className="hover:text-secondary">
+          {category?.name ?? "Catalog"}
+        </Link>
+        <Icon name="chevron_right" className="text-sm" />
         <span className="font-bold text-primary">{product.name}</span>
       </nav>
 
@@ -112,22 +132,28 @@ export default async function ProductDetailPage({
                 <Icon name="check_circle" className="text-sm" filled /> {product.badge}
               </span>
             )}
-            <ProductImage className="aspect-[4/3]" />
+            <ProductImage
+              className="aspect-[4/3]"
+              src={product.image}
+              alt={product.name}
+            />
           </div>
-          <div className="mt-4 grid grid-cols-4 gap-4">
-            {[0, 1, 2, 3].map((i) => (
-              <ProductImage
-                key={i}
-                className="aspect-square border border-industrial-gray"
-              />
-            ))}
-          </div>
+          {!product.image && (
+            <div className="mt-4 grid grid-cols-4 gap-4">
+              {[0, 1, 2, 3].map((i) => (
+                <ProductImage
+                  key={i}
+                  className="aspect-square border border-industrial-gray"
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Summary + actions */}
         <div>
           <span className="text-label-bold font-bold uppercase tracking-widest text-secondary">
-            Heavy-Duty FIBC · {product.sku}
+            {category?.name ?? "FIBC"} · {product.sku}
           </span>
           <h1 className="mt-2 font-display text-headline-xl leading-tight text-primary">
             {product.name}
@@ -168,16 +194,73 @@ export default async function ProductDetailPage({
                 key={row.label}
                 className={i % 2 === 0 ? "bg-white" : "bg-surface-container-low"}
               >
-                <th className="w-1/2 border-b border-industrial-gray px-6 py-3 text-label-bold font-bold uppercase text-on-surface-variant">
+                <th className="w-1/2 border-b border-industrial-gray px-4 py-3 text-label-bold font-bold uppercase text-on-surface-variant sm:px-6">
                   {row.label}
                 </th>
-                <td className="border-b border-industrial-gray px-6 py-3 font-bold text-primary">
+                <td className="border-b border-industrial-gray px-4 py-3 font-bold text-primary sm:px-6">
                   {row.value}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </section>
+
+      {/* Configuration options */}
+      <section className="mt-16">
+        <div className="mb-8 border-l-8 border-secondary pl-6">
+          <h2 className="font-display text-headline-lg uppercase text-primary">
+            Configuration Options
+          </h2>
+          <p className="text-body-md text-on-surface-variant">
+            Every Standard FIBC can be built to your spec. Note your choices in
+            the quote request.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { title: "Top Options", icon: "vertical_align_top", items: bagOptions.topOptions },
+            { title: "Bottom Options", icon: "vertical_align_bottom", items: bagOptions.bottomOptions },
+            { title: "Lifting Loops", icon: "drag_handle", items: bagOptions.loopOptions },
+            { title: "Liner Options", icon: "layers", items: bagOptions.linerOptions },
+            { title: "Printing", icon: "print", items: bagOptions.printingOptions },
+            { title: "Fabric & Safety", icon: "shield", items: [...bagOptions.fabricOptions, ...bagOptions.safetyFactors] },
+          ].map((group) => (
+            <div
+              key={group.title}
+              className="border border-industrial-gray bg-white p-6 hard-shadow"
+            >
+              <h3 className="mb-3 flex items-center gap-2 text-label-bold font-bold uppercase text-secondary">
+                <Icon name={group.icon} className="text-base" /> {group.title}
+              </h3>
+              <ul className="space-y-1.5">
+                {group.items.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-2 text-body-sm text-on-surface-variant"
+                  >
+                    <Icon name="check" className="text-sm text-primary" /> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 border border-industrial-gray bg-surface-container-low p-6">
+          <h3 className="mb-3 text-label-bold font-bold uppercase text-primary">
+            Ideal for bulk materials
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {(category?.materials ?? []).map((m) => (
+              <span
+                key={m}
+                className="border border-industrial-gray bg-white px-3 py-1 text-body-sm text-on-surface-variant"
+              >
+                {m}
+              </span>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Related */}

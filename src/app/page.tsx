@@ -3,8 +3,13 @@ import { ButtonLink } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ProductCard";
+import { ProductImage } from "@/components/ui/ProductImage";
 import { certifications, site } from "@/lib/site";
-import { products } from "@/lib/products";
+import {
+  categories,
+  categoryCardImage,
+  products,
+} from "@/lib/products";
 import { industries } from "@/lib/industries";
 
 export default function Home() {
@@ -13,9 +18,9 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative flex min-h-[560px] items-center overflow-hidden border-b border-industrial-gray bg-surface-container-lowest">
+      <section className="relative flex min-h-[440px] items-center sm:min-h-[560px] overflow-hidden border-b border-industrial-gray bg-surface-container-lowest">
         <div className="industrial-grid absolute inset-0 opacity-70" />
-        <div className="container relative z-10 mx-auto grid grid-cols-12 gap-6 px-margin-mobile py-20 md:px-8">
+        <div className="container relative z-10 mx-auto grid grid-cols-12 gap-6 px-margin-mobile py-14 sm:py-20 md:px-8">
           <div className="col-span-12 lg:col-span-8">
             <span className="mb-6 inline-block bg-primary px-3 py-1 text-label-bold font-bold uppercase tracking-widest text-on-primary">
               {site.established}
@@ -41,7 +46,7 @@ export default function Home() {
       </section>
 
       {/* Trust bar */}
-      <section className="border-b-4 border-secondary bg-primary-container py-12">
+      <section className="border-b-4 border-secondary bg-primary-container py-8 sm:py-12">
         <div className="container mx-auto grid grid-cols-2 items-center gap-8 px-margin-mobile md:grid-cols-4 md:px-8">
           {certifications.map((c) => (
             <div
@@ -58,74 +63,53 @@ export default function Home() {
       </section>
 
       {/* Core configurations / category grid */}
-      <section className="bg-surface-container-lowest py-16">
+      <section className="bg-surface-container-lowest py-12 sm:py-16">
         <div className="container mx-auto px-margin-mobile md:px-8">
           <SectionHeading
-            title="Core Configurations"
-            subtitle="Optimized for every material-handling requirement."
+            title="Shop by Category"
+            subtitle="FIBC bulk bags and woven packaging for every industry and material."
           />
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-12 md:grid-rows-2 md:h-[600px]">
-            <Link
-              href="/products"
-              className="group relative flex flex-col justify-end overflow-hidden border border-industrial-gray bg-surface-container p-8 hard-shadow md:col-span-8 md:row-span-2"
-            >
-              <div className="industrial-grid absolute inset-0 opacity-40" />
-              <div className="relative z-10">
-                <span className="mb-4 inline-block bg-secondary px-2 py-1 text-[10px] font-bold uppercase text-on-secondary">
-                  Bestseller
-                </span>
-                <h3 className="mb-2 font-display text-headline-md text-primary">
-                  STANDARD U-PANEL
-                </h3>
-                <p className="mb-4 max-w-md text-on-surface-variant">
-                  The industry standard for high-capacity storage. 2,200lb –
-                  4,000lb SWL options available.
-                </p>
-                <span className="flex items-center gap-2 text-label-bold font-bold uppercase text-secondary">
-                  Explore Specs <Icon name="arrow_forward" className="text-sm" />
-                </span>
-              </div>
-            </Link>
-
-            <Link
-              href="/products"
-              className="flex flex-col justify-between border border-industrial-gray bg-white p-6 hard-shadow md:col-span-4"
-            >
-              <div>
-                <Icon
-                  name="settings_input_component"
-                  className="mb-4 text-3xl text-secondary"
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {categories.map((cat) => (
+              <Link
+                key={cat.slug}
+                href={`/products#${cat.slug}`}
+                className="group flex flex-col overflow-hidden border border-industrial-gray bg-white transition-shadow hover:shadow-[4px_4px_0px_0px_rgba(10,26,47,0.08)]"
+              >
+                <ProductImage
+                  src={categoryCardImage(cat)}
+                  alt={cat.name}
+                  className="aspect-[4/3]"
                 />
-                <h3 className="font-display text-headline-sm text-primary">
-                  CIRCULAR BAGS
-                </h3>
-              </div>
-              <p className="text-body-sm text-on-surface-variant">
-                Seamless tubular design for fine powders and leak prevention.
-              </p>
-            </Link>
-
-            <Link
-              href="/custom-quote"
-              className="flex flex-col justify-between bg-slate-dark p-6 text-white md:col-span-4"
-            >
-              <div>
-                <Icon name="tune" className="mb-4 text-3xl text-secondary-fixed" />
-                <h3 className="font-display text-headline-sm">
-                  CUSTOM & SPECIALTY
-                </h3>
-              </div>
-              <p className="text-body-sm opacity-70">
-                Conductive, UN-rated, and food-grade solutions for sensitive
-                cargo.
-              </p>
-            </Link>
+                <div className="flex flex-1 flex-col p-6">
+                  <h3 className="font-display text-headline-sm uppercase text-primary group-hover:text-secondary">
+                    {cat.name}
+                  </h3>
+                  <p className="mt-1 flex-1 text-body-sm text-on-surface-variant">
+                    {cat.tagline}
+                  </p>
+                  <div className="mt-4 flex items-center justify-between border-t border-industrial-gray pt-4">
+                    <span className="font-display text-headline-sm text-secondary">
+                      ${cat.priceMin.toFixed(2)} – ${cat.priceMax.toFixed(2)}
+                      {cat.priceUnit && (
+                        <span className="ml-1 text-body-sm font-normal text-on-surface-variant">
+                          {cat.priceUnit}
+                        </span>
+                      )}
+                    </span>
+                    <span className="flex items-center gap-1 text-label-bold font-bold uppercase tracking-widest text-secondary">
+                      View <Icon name="arrow_forward" className="text-sm" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Best sellers */}
-      <section className="bg-surface py-16">
+      <section className="bg-surface py-12 sm:py-16">
         <div className="container mx-auto px-margin-mobile md:px-8">
           <SectionHeading
             title="Best-Selling Configurations"
@@ -145,7 +129,7 @@ export default function Home() {
       </section>
 
       {/* Industries */}
-      <section className="border-y border-industrial-gray bg-surface-container-lowest py-16">
+      <section className="border-y border-industrial-gray bg-surface-container-lowest py-12 sm:py-16">
         <div className="container mx-auto px-margin-mobile md:px-8">
           <SectionHeading
             title="Built for Your Industry"
@@ -174,7 +158,7 @@ export default function Home() {
       </section>
 
       {/* Custom quote CTA */}
-      <section className="border-y border-industrial-gray bg-surface-container-highest py-16">
+      <section className="border-y border-industrial-gray bg-surface-container-highest py-12 sm:py-16">
         <div className="container mx-auto grid grid-cols-12 items-center gap-6 px-margin-mobile md:px-8">
           <div className="col-span-12 lg:col-span-7">
             <h2 className="mb-4 font-display text-headline-lg uppercase text-primary">

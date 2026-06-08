@@ -12,7 +12,7 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <div className="group flex flex-col border border-industrial-gray bg-white transition-shadow duration-300 hover:shadow-[4px_4px_0px_0px_rgba(10,26,47,0.08)]">
       <Link href={`/products/${product.slug}`} className="relative block">
-        <ProductImage className="aspect-square" />
+        <ProductImage className="aspect-square" src={product.image} alt={product.name} />
         {product.badge && (
           <span className="absolute right-4 top-4 bg-secondary px-3 py-1 text-label-bold font-bold uppercase text-white">
             {product.badge}

@@ -1,4 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -37,26 +36,28 @@
   --font-display: var(--font-hanken), "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --text-headline-xl: 48px;
-  --text-headline-xl--line-height: 56px;
+  /* Fluid heading sizes: scale down on small screens, cap on large.
+     Unitless line-heights so they track the clamped font-size. */
+  --text-headline-xl: clamp(1.875rem, 1.05rem + 3.6vw, 3rem); /* 30 → 48px */
+  --text-headline-xl--line-height: 1.1;
   --text-headline-xl--letter-spacing: -0.02em;
   --text-headline-xl--font-weight: 800;
 
-  --text-headline-lg: 32px;
-  --text-headline-lg--line-height: 40px;
+  --text-headline-lg: clamp(1.5rem, 1.1rem + 1.9vw, 2rem); /* 24 → 32px */
+  --text-headline-lg--line-height: 1.15;
   --text-headline-lg--letter-spacing: -0.01em;
   --text-headline-lg--font-weight: 700;
 
-  --text-headline-md: 24px;
-  --text-headline-md--line-height: 32px;
+  --text-headline-md: clamp(1.3rem, 1.1rem + 0.9vw, 1.5rem); /* ~21 → 24px */
+  --text-headline-md--line-height: 1.25;
   --text-headline-md--font-weight: 700;
 
-  --text-headline-sm: 20px;
-  --text-headline-sm--line-height: 28px;
+  --text-headline-sm: clamp(1.125rem, 1.02rem + 0.5vw, 1.25rem); /* 18 → 20px */
+  --text-headline-sm--line-height: 1.3;
   --text-headline-sm--font-weight: 600;
 
-  --text-body-lg: 18px;
-  --text-body-lg--line-height: 28px;
+  --text-body-lg: clamp(1rem, 0.95rem + 0.25vw, 1.125rem); /* 16 → 18px */
+  --text-body-lg--line-height: 1.55;
 
   --text-body-md: 16px;
   --text-body-md--line-height: 24px;
@@ -76,12 +77,23 @@
 
 html {
   scroll-behavior: smooth;
+  /* Guard against accidental horizontal scroll on mobile (no sticky elements
+     in the app, so clip is safe and side-effect free). */
+  overflow-x: clip;
 }
 
 body {
   background-color: var(--color-surface);
   color: var(--color-on-surface);
   font-family: var(--font-sans);
+}
+
+/* Media never forces the viewport wider than the screen. */
+img,
+svg,
+video,
+table {
+  max-width: 100%;
 }
 
 /* Display font for headings */
@@ -101,19 +113,4 @@ h5 {
 
 .hard-shadow {
   box-shadow: 4px 4px 0px 0px rgba(10, 26, 47, 0.06);
-}
-
-/* Material Symbols icon font defaults */
-.material-symbols-outlined {
-  font-family: "Material Symbols Outlined";
-  font-weight: normal;
-  font-style: normal;
-  line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
