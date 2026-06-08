@@ -22,7 +22,7 @@ export function Logo({
     >
       <span
         className={
-          onDark ? "inline-block rounded-md bg-white p-2.5" : "inline-flex"
+          onDark ? "inline-block rounded-md bg-white p-3" : "inline-flex"
         }
       >
         <Image
@@ -30,8 +30,9 @@ export function Logo({
           alt="Texas Bulk Bags"
           width={1280}
           height={853}
+          quality={95}
           priority={!onDark}
-          className={onDark ? "h-12 w-auto" : "h-12 w-auto sm:h-14"}
+          className={onDark ? "h-14 w-auto" : "h-14 w-auto sm:h-16"}
         />
       </span>
     </Link>

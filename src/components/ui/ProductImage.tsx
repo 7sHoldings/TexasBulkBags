@@ -45,11 +45,17 @@ export function ProductImage({
   src,
   alt,
   label,
+  cover = false,
+  position = "center",
 }: {
   className?: string;
   src?: string;
   alt?: string;
   label?: string;
+  /** Crop to fill the box instead of fitting the whole image. */
+  cover?: boolean;
+  /** object-position when cover is used (e.g. "top", "center"). */
+  position?: string;
 }) {
   return (
     <div
@@ -63,7 +69,8 @@ export function ProductImage({
           alt={alt ?? "Bulk bag product photo"}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-contain"
+          className={cover ? "object-cover" : "object-contain"}
+          style={cover ? { objectPosition: position } : undefined}
         />
       ) : (
         <>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { nav } from "@/lib/site";
+import { categories } from "@/lib/products";
 import { useCart } from "@/components/CartProvider";
 import { Icon } from "@/components/ui/Icon";
 import { Logo } from "@/components/ui/Logo";
@@ -32,19 +33,53 @@ export function Header() {
       </div>
 
       <nav className="hidden h-full items-center gap-8 md:flex">
-        {nav.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex h-full items-center text-label-bold font-bold uppercase tracking-widest transition-colors ${
-              isActive(item.href)
-                ? "border-b-2 border-secondary text-secondary"
-                : "text-on-surface-variant hover:text-secondary"
-            }`}
-          >
-            {item.label}
-          </Link>
-        ))}
+        {nav.map((item) => {
+          const linkClass = `flex h-full items-center gap-1 text-label-bold font-bold uppercase tracking-widest transition-colors ${
+            isActive(item.href)
+              ? "border-b-2 border-secondary text-secondary"
+              : "text-on-surface-variant hover:text-secondary"
+          }`;
+
+          if (item.href === "/products") {
+            return (
+              <div
+                key={item.href}
+                className="group relative flex h-full items-center"
+              >
+                <Link href={item.href} className={linkClass}>
+                  {item.label}
+                  <Icon
+                    name="expand_more"
+                    className="text-base transition-transform group-hover:rotate-180"
+                  />
+                </Link>
+                <div className="invisible absolute left-1/2 top-full z-50 w-80 -translate-x-1/2 translate-y-1 border border-industrial-gray bg-surface-container-lowest opacity-0 shadow-xl transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  {categories.map((c) => (
+                    <Link
+                      key={c.slug}
+                      href={`/products#${c.slug}`}
+                      className="flex items-center justify-between gap-3 border-b border-industrial-gray px-5 py-3 transition-colors last:border-b-0 hover:bg-surface-container-low"
+                    >
+                      <span className="text-body-sm font-bold text-primary">
+                        {c.name}
+                      </span>
+                      <span className="font-sans text-mono-spec text-secondary">
+                        ${c.priceMin.toFixed(2)}
+                        {c.priceUnit ? c.priceUnit : "+"}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <Link key={item.href} href={item.href} className={linkClass}>
+              {item.label}
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="flex items-center gap-3">
@@ -73,14 +108,29 @@ export function Header() {
         <nav className="absolute left-0 top-20 w-full border-b border-industrial-gray bg-surface-container-lowest md:hidden">
           <div className="flex flex-col px-margin-mobile py-2">
             {nav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="py-3 text-label-bold font-bold uppercase tracking-widest text-on-surface-variant hover:text-secondary"
-              >
-                {item.label}
-              </Link>
+              <div key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className="block py-3 text-label-bold font-bold uppercase tracking-widest text-on-surface-variant hover:text-secondary"
+                >
+                  {item.label}
+                </Link>
+                {item.href === "/products" && (
+                  <div className="mb-2 flex flex-col border-l border-industrial-gray pl-4">
+                    {categories.map((c) => (
+                      <Link
+                        key={c.slug}
+                        href={`/products#${c.slug}`}
+                        onClick={() => setOpen(false)}
+                        className="py-2 text-body-sm font-medium text-on-surface-variant hover:text-secondary"
+                      >
+                        {c.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </nav>

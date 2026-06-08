@@ -80,6 +80,8 @@ export default function Home() {
                   src={categoryCardImage(cat)}
                   alt={cat.name}
                   className="aspect-[4/3]"
+                  cover={cat.productType === "woven"}
+                  position="top"
                 />
                 <div className="flex flex-1 flex-col p-6">
                   <h3 className="font-display text-headline-sm uppercase text-primary group-hover:text-secondary">
