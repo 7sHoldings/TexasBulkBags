@@ -282,6 +282,47 @@ export const categories: Category[] = [
     ],
     widthOptions: ['16"', '18"', '20"', '22"', '24"', '26"', '28"', '30"', '32"', '34"', '36"'],
   },
+  {
+    slug: "bopp-bags",
+    name: "BOPP Bags",
+    shortName: "BOPP Bag",
+    tagline: "Strong. Transparent. Printable.",
+    blurb:
+      "BOPP (Biaxially Oriented Polypropylene) bags combine the strength of PP woven fabric with the clarity and printability of BOPP film — exceptional durability, product visibility, and branding.",
+    priceMin: 0.45,
+    priceMax: 1.75,
+    priceUnit: "/ bag",
+    flyer: "/categories/bopp-bags.jpg",
+    skuPrefix: "BOPP",
+    construction: "U-Panel",
+    foodGrade: false,
+    baffled: false,
+    productType: "woven",
+    materials: [
+      "Animal Feeds",
+      "Fertilizer",
+      "Detergent",
+      "Cement",
+      "Seeds & Pulses",
+      "Spices",
+      "Snacks & Food Items",
+    ],
+    benefits: [
+      { title: "Strong & Reliable", description: "PP woven strength with a BOPP film for superior performance." },
+      { title: "High Transparency", description: "Clear finish for excellent product visibility and appeal." },
+      { title: "Excellent Print Quality", description: "High-quality surface for vibrant, durable printing." },
+      { title: "Moisture & Dust Protection", description: "Protects products from moisture, dust, and contaminants." },
+    ],
+    specs: [
+      { label: "Width", value: "325 mm – 1220 mm (13\" – 48\")" },
+      { label: "Film", value: "10 – 15 micron" },
+      { label: "Finish", value: "Natural & matte" },
+      { label: "Bag Types", value: "D-cut, Handle, Flat-cut" },
+      { label: "Color", value: "As per requirement" },
+      { label: "Lamination", value: "As per requirement" },
+    ],
+    widthOptions: ['13"', '17"', '20.5"', '24.5"', '28.5"', '36"', '40"', '48"'],
+  },
 ];
 
 export function getCategory(slug: string): Category | undefined {

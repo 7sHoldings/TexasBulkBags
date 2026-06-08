@@ -144,7 +144,7 @@ export default function ProductsPage() {
                       href="/custom-quote"
                       className="inline-flex items-center justify-center gap-2 bg-secondary px-6 py-4 font-display text-label-bold uppercase tracking-widest text-on-secondary hover:bg-secondary-container"
                     >
-                      Request a Woven Bag Quote{" "}
+                      Request a {cat.shortName} Quote{" "}
                       <Icon name="arrow_forward" className="text-sm" />
                     </Link>
                   </div>
