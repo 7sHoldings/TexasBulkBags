@@ -50,6 +50,12 @@ function specRows(p: Product) {
           value: `${p.volumeFt3} ft³ (${p.volumeM3} m³)`,
         }
       : null,
+    { label: "Rated Safety Factor", value: p.safetyFactor },
+    p.staticType !== "Type A"
+      ? { label: "Static Type", value: p.staticType }
+      : null,
+    p.unCertified ? { label: "UN Certified", value: "Yes" } : null,
+    p.foodGrade ? { label: "Food Grade", value: "Yes" } : null,
     { label: "Top Style", value: p.topStyle },
     { label: "Bottom Style", value: p.bottomStyle },
     { label: "Fabric", value: p.fabric },
