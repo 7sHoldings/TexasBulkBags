@@ -32,7 +32,7 @@ export function Logo({
           height={853}
           quality={95}
           priority={!onDark}
-          className={onDark ? "h-14 w-auto" : "h-14 w-auto sm:h-16"}
+          className={onDark ? "h-16 w-auto" : "h-16 w-auto sm:h-20"}
         />
       </span>
     </Link>

@@ -11,6 +11,7 @@ import { Logo } from "@/components/ui/Logo";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [bagsOpen, setBagsOpen] = useState(false);
   const pathname = usePathname();
   const { count } = useCart();
 
@@ -18,7 +19,7 @@ export function Header() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="fixed top-0 z-50 flex h-20 w-full items-center justify-between border-b border-industrial-gray bg-surface-container-lowest px-margin-mobile md:px-8">
+    <header className="fixed top-0 z-50 flex h-24 w-full items-center justify-between border-b border-industrial-gray bg-surface-container-lowest px-margin-mobile md:px-8">
       <div className="flex min-w-0 items-center gap-2 sm:gap-4">
         <button
           type="button"
@@ -44,32 +45,43 @@ export function Header() {
             return (
               <div
                 key={item.href}
-                className="group relative flex h-full items-center"
+                className="relative flex h-full items-center"
+                onMouseEnter={() => setBagsOpen(true)}
+                onMouseLeave={() => setBagsOpen(false)}
               >
-                <Link href={item.href} className={linkClass}>
+                <Link
+                  href={item.href}
+                  className={linkClass}
+                  onClick={() => setBagsOpen(false)}
+                >
                   {item.label}
                   <Icon
                     name="expand_more"
-                    className="text-base transition-transform group-hover:rotate-180"
+                    className={`text-base transition-transform ${
+                      bagsOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </Link>
-                <div className="invisible absolute left-1/2 top-full z-50 w-80 -translate-x-1/2 translate-y-1 border border-industrial-gray bg-surface-container-lowest opacity-0 shadow-xl transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                  {categories.map((c) => (
-                    <Link
-                      key={c.slug}
-                      href={`/products#${c.slug}`}
-                      className="flex items-center justify-between gap-3 border-b border-industrial-gray px-5 py-3 transition-colors last:border-b-0 hover:bg-surface-container-low"
-                    >
-                      <span className="text-body-sm font-bold text-primary">
-                        {c.name}
-                      </span>
-                      <span className="font-sans text-mono-spec text-secondary">
-                        ${c.priceMin.toFixed(2)}
-                        {c.priceUnit ? c.priceUnit : "+"}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+                {bagsOpen && (
+                  <div className="absolute left-1/2 top-full z-50 w-80 -translate-x-1/2 border border-industrial-gray bg-surface-container-lowest shadow-xl">
+                    {categories.map((c) => (
+                      <Link
+                        key={c.slug}
+                        href={`/products#${c.slug}`}
+                        onClick={() => setBagsOpen(false)}
+                        className="flex items-center justify-between gap-3 border-b border-industrial-gray px-5 py-3 transition-colors last:border-b-0 hover:bg-surface-container-low"
+                      >
+                        <span className="text-body-sm font-bold text-primary">
+                          {c.name}
+                        </span>
+                        <span className="font-sans text-mono-spec text-secondary">
+                          ${c.priceMin.toFixed(2)}
+                          {c.priceUnit ? c.priceUnit : "+"}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           }
@@ -105,7 +117,7 @@ export function Header() {
       </div>
 
       {open && (
-        <nav className="absolute left-0 top-20 w-full border-b border-industrial-gray bg-surface-container-lowest md:hidden">
+        <nav className="absolute left-0 top-24 w-full border-b border-industrial-gray bg-surface-container-lowest md:hidden">
           <div className="flex flex-col px-margin-mobile py-2">
             {nav.map((item) => (
               <div key={item.href}>

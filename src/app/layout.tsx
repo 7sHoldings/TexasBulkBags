@@ -60,7 +60,7 @@ export default function RootLayout({
         <SiteJsonLd />
         <CartProvider>
           <Header />
-          <main className="flex-1 pt-20">{children}</main>
+          <main className="flex-1 pt-24">{children}</main>
           <Footer />
         </CartProvider>
         <Analytics />
