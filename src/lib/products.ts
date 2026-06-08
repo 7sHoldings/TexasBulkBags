@@ -164,6 +164,7 @@ export const categories: Category[] = [
     priceMax: 27.95,
     flyer: "/categories/food-grade-clean-room-fibc.jpg",
     skuPrefix: "FG",
+    hasPhotos: true,
     construction: "U-Panel",
     foodGrade: true,
     baffled: false,
