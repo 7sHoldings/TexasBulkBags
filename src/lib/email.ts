@@ -1,5 +1,3 @@
-import { site } from "@/lib/site";
-
 type SendArgs = {
   subject: string;
   /** Plain-text body. Rendered as <pre> in the HTML email. */
@@ -21,7 +19,9 @@ export async function sendLeadEmail({
   replyTo,
 }: SendArgs): Promise<{ delivered: boolean }> {
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.LEAD_INBOX ?? site.email;
+  // Internal inbox that receives quote/order/contact leads. Overridable via
+  // the LEAD_INBOX env var; defaults to the company's lead address.
+  const to = process.env.LEAD_INBOX ?? "texasbulkbags@gmail.com";
   const from = process.env.EMAIL_FROM ?? "Texas Bulk Bags <onboarding@resend.dev>";
 
   if (!apiKey) {
