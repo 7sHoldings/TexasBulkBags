@@ -7,13 +7,17 @@ export type Product = {
   slug: string;
   sku: string;
   name: string;
+  category: string;
   shortDescription: string;
   description: string;
   badge?: "In Stock" | "Best Seller" | "Made to Order";
   inStock: boolean;
   dimensions: string; // L x W x H, inches
   baseFootprint: number; // inches (width/depth)
-  swl: number; // safe working load, lbs
+  swl: number; // safe working load @ 5:1, lbs
+  swl6?: number; // safe working load @ 6:1, lbs
+  volumeFt3?: number;
+  volumeM3?: number;
   safetyFactor: "5:1" | "6:1" | "8:1";
   construction: Construction;
   topStyle: TopStyle;
@@ -27,229 +31,124 @@ export type Product = {
   liftLoops: string;
   uvProtection: string;
   priceFrom: number; // per unit USD
-  /** Optional real photo (e.g. "/products/tbb-up-35.jpg"). Falls back to an
-   *  illustrated placeholder when omitted. */
+  /** Optional real photo (e.g. "/products/standard-fibc-35x35x39.jpg").
+   *  Falls back to an illustrated placeholder when omitted. */
   image?: string;
 };
 
-export const products: Product[] = [
-  {
-    slug: "tbb-up-35-upanel-spout",
-    sku: "TBB-UP-35",
-    name: "U-Panel Spout Top",
-    shortDescription:
-      "The industry-standard bulk bag with a discharge spout and 5:1 safety factor.",
-    description:
-      "Premium grade industrial bulk bag designed for high-capacity material handling. Featuring a reinforced U-panel construction for maximum structural integrity and a dual spout configuration for controlled filling and discharging.",
-    badge: "Best Seller",
-    inStock: true,
-    dimensions: '35" × 35" × 50"',
-    baseFootprint: 35,
-    swl: 3000,
-    safetyFactor: "5:1",
-    construction: "U-Panel",
-    topStyle: "Spout Top",
-    bottomStyle: "Spout Bottom",
-    staticType: "Type A",
-    fabric: "160+ GSM woven polypropylene",
-    coated: false,
-    baffled: false,
-    foodGrade: false,
-    unCertified: false,
-    liftLoops: "Cross-corner, 4-loop",
-    uvProtection: "1,200 hours",
-    priceFrom: 18.45,
-  },
-  {
-    slug: "tbb-up-40-duffle-spout",
-    sku: "TBB-UP-40",
-    name: "U-Panel Duffle Top",
-    shortDescription:
-      "High-capacity U-panel bag with an easy-fill duffle top and discharge spout.",
-    description:
-      "A workhorse U-panel bulk bag pairing a full duffle top for fast, open filling with a discharge spout for controlled emptying. Ideal for aggregates, grains, and bulk minerals.",
-    badge: "In Stock",
-    inStock: true,
-    dimensions: '40" × 40" × 60"',
-    baseFootprint: 40,
-    swl: 3300,
-    safetyFactor: "5:1",
-    construction: "U-Panel",
-    topStyle: "Duffle Top",
-    bottomStyle: "Spout Bottom",
-    staticType: "Type A",
-    fabric: "170 GSM woven polypropylene",
-    coated: true,
-    baffled: false,
-    foodGrade: false,
-    unCertified: false,
-    liftLoops: "Cross-corner, 4-loop",
-    uvProtection: "1,500 hours",
-    priceFrom: 21.9,
-  },
-  {
-    slug: "tbb-circ-42-duffle",
-    sku: "TBB-CIRC-42",
-    name: "Circular Duffle Top",
-    shortDescription:
-      "Seamless tubular construction reduces seam stress — ideal for fine powders.",
-    description:
-      "Circular (tubular) woven construction eliminates vertical side seams, reducing stress points and minimizing sift. The preferred choice for fine powders, cement, and leak-sensitive materials.",
-    badge: "In Stock",
-    inStock: true,
-    dimensions: '42" × 42" × 45"',
-    baseFootprint: 42,
-    swl: 2200,
-    safetyFactor: "5:1",
-    construction: "Circular",
-    topStyle: "Duffle Top",
-    bottomStyle: "Flat Bottom",
-    staticType: "Type A",
-    fabric: "155 GSM tubular polypropylene",
-    coated: true,
-    baffled: false,
-    foodGrade: false,
-    unCertified: false,
-    liftLoops: "Corner, 4-loop",
-    uvProtection: "1,200 hours",
-    priceFrom: 13.75,
-  },
-  {
-    slug: "tbb-baf-38-baffle",
-    sku: "TBB-BAF-38",
-    name: "Baffle Q-Bag",
-    shortDescription:
-      "Internal baffles hold a square shape and add up to 30% more volume per footprint.",
-    description:
-      "Baffle (Q-bag) construction sews fabric panels across each corner so the bag retains a square shape when filled — saving warehouse and container space while increasing usable volume by up to 30%.",
-    badge: "In Stock",
-    inStock: true,
-    dimensions: '38" × 38" × 42"',
-    baseFootprint: 38,
-    swl: 3000,
-    safetyFactor: "5:1",
-    construction: "Baffled (Q-Bag)",
-    topStyle: "Duffle Top",
-    bottomStyle: "Spout Bottom",
-    staticType: "Type A",
-    fabric: "165 GSM woven polypropylene",
-    coated: false,
-    baffled: true,
-    foodGrade: false,
-    unCertified: false,
-    liftLoops: "Cross-corner, 4-loop",
-    uvProtection: "1,200 hours",
-    priceFrom: 19.95,
-  },
-  {
-    slug: "tbb-fg-35-foodgrade",
-    sku: "TBB-FG-35",
-    name: "Food-Grade Clean-Room FIBC",
-    shortDescription:
-      "Clean-room manufactured for food, grain, and ingredient handling.",
-    description:
-      "Manufactured in a certified clean room to prevent contamination from thread, insects, and particulates. FDA-compliant fabric with optional PE liners for sugar, flour, grains, and food ingredients.",
-    badge: "Made to Order",
-    inStock: false,
-    dimensions: '35" × 35" × 47"',
-    baseFootprint: 35,
-    swl: 2200,
-    safetyFactor: "6:1",
-    construction: "U-Panel",
-    topStyle: "Spout Top",
-    bottomStyle: "Spout Bottom",
-    staticType: "Type A",
-    fabric: "Food-grade virgin polypropylene",
-    coated: false,
-    baffled: false,
-    foodGrade: true,
-    unCertified: false,
-    liftLoops: "Cross-corner, 4-loop",
-    uvProtection: "800 hours",
-    priceFrom: 24.5,
-  },
-  {
-    slug: "tbb-un-37-hazmat",
-    sku: "TBB-UN-37",
-    name: "UN-Certified HAZMAT Bag",
-    shortDescription:
-      "UN-rated and tested for transport of regulated hazardous materials.",
-    description:
-      "Certified and documented for the transport of UN-rated hazardous materials worldwide. Supplied with test reports and custom HAZMAT labeling on request.",
-    badge: "Made to Order",
-    inStock: false,
-    dimensions: '37" × 37" × 47"',
-    baseFootprint: 37,
-    swl: 4000,
-    safetyFactor: "6:1",
-    construction: "U-Panel",
-    topStyle: "Spout Top",
-    bottomStyle: "Spout Bottom",
-    staticType: "Type A",
-    fabric: "200 GSM coated polypropylene",
-    coated: true,
-    baffled: false,
-    foodGrade: false,
-    unCertified: true,
-    liftLoops: "Cross-corner, 4-loop",
-    uvProtection: "1,500 hours",
-    priceFrom: 32.0,
-  },
-  {
-    slug: "tbb-c-39-conductive",
-    sku: "TBB-C-39",
-    name: "Type C Conductive FIBC",
-    shortDescription:
-      "Groundable Type C bag for combustible powders and flammable environments.",
-    description:
-      "Type C conductive (groundable) FIBC interwoven with a grid of conductive yarns. Engineered to safely dissipate static charge when grounded — essential for combustible powders and flammable atmospheres.",
-    badge: "Made to Order",
-    inStock: false,
-    dimensions: '39" × 39" × 51"',
-    baseFootprint: 39,
-    swl: 3300,
-    safetyFactor: "6:1",
-    construction: "U-Panel",
-    topStyle: "Duffle Top",
-    bottomStyle: "Spout Bottom",
-    staticType: "Type C",
-    fabric: "180 GSM conductive-grid polypropylene",
-    coated: true,
-    baffled: false,
-    foodGrade: false,
-    unCertified: false,
-    liftLoops: "Cross-corner, 4-loop",
-    uvProtection: "1,200 hours",
-    priceFrom: 36.75,
-  },
-  {
-    slug: "tbb-ot-44-opentop-flat",
-    sku: "TBB-OT-44",
-    name: "Open Top / Flat Bottom",
-    shortDescription:
-      "Open-top, flat-bottom bag for fast filling of construction debris and soil.",
-    description:
-      "An open-top, flat-bottom builder bag for rapid filling of soil, mulch, debris, and jobsite material. UV-stabilized for outdoor storage and rated for crane or forklift handling.",
-    badge: "In Stock",
-    inStock: true,
-    dimensions: '36" × 36" × 36"',
-    baseFootprint: 36,
-    swl: 2200,
-    safetyFactor: "5:1",
-    construction: "4-Panel",
-    topStyle: "Open Top",
-    bottomStyle: "Flat Bottom",
-    staticType: "Type A",
-    fabric: "160 GSM woven polypropylene",
-    coated: false,
-    baffled: false,
-    foodGrade: false,
-    unCertified: false,
-    liftLoops: "Corner, 4-loop",
-    uvProtection: "1,800 hours",
-    priceFrom: 13.0,
-  },
+/** Shared option lists for the Standard FIBC Bulk Bag line. */
+export const standardFibc = {
+  tagline: "Versatile. Strong. Reliable.",
+  priceMin: 10.95,
+  priceMax: 21.95,
+  topOptions: ["Open Top", "Duffle Top", "Spout Top", "Fill Spout Top"],
+  bottomOptions: [
+    "Flat Bottom",
+    "Discharge Spout",
+    "Conical Bottom",
+    "Discharge Spout with Flap",
+  ],
+  loopOptions: [
+    "Corner Loops",
+    "Cross-Corner Loops",
+    "U-Panel Loops",
+    "Sleeve Lift",
+    "Tunnel Lift",
+  ],
+  linerOptions: [
+    "No Liner",
+    "Loose PE Liner",
+    "Form-Fit Liner",
+    "Aluminized Liner",
+  ],
+  printingOptions: [
+    "Unprinted",
+    "1 Color Print",
+    "2 Color Print",
+    "Full Color Print",
+  ],
+  fabricOptions: [
+    "100% Virgin Polypropylene",
+    "Coated / Uncoated",
+    "UV Treated",
+    "Anti-Slip Available",
+  ],
+  safetyFactors: ["5:1 Standard", "6:1 Heavy Duty"],
+  materials: [
+    "Sand",
+    "Gravel",
+    "Cement",
+    "Soil",
+    "Minerals",
+    "Fertilizer",
+    "Plastic Resin",
+    "Chemicals",
+    "Grains",
+    "Powders",
+    "Feed",
+  ],
+};
+
+type SizeRow = {
+  l: number;
+  w: number;
+  h: number;
+  swl: number;
+  swl6: number;
+  ft3: number;
+  m3: number;
+  price: number;
+  badge?: Product["badge"];
+};
+
+// Real Standard FIBC size chart (price range $10.95–$21.95).
+const sizes: SizeRow[] = [
+  { l: 35, w: 35, h: 39, swl: 2200, swl6: 2600, ft3: 28, m3: 0.79, price: 10.95, badge: "In Stock" },
+  { l: 35, w: 35, h: 47, swl: 2600, swl6: 3100, ft3: 33, m3: 0.93, price: 11.95, badge: "Best Seller" },
+  { l: 39, w: 39, h: 39, swl: 2650, swl6: 3200, ft3: 35, m3: 0.99, price: 12.5 },
+  { l: 35, w: 35, h: 59, swl: 3300, swl6: 4000, ft3: 41, m3: 1.16, price: 13.5 },
+  { l: 39, w: 39, h: 51, swl: 3300, swl6: 4000, ft3: 46, m3: 1.3, price: 14.5 },
+  { l: 42, w: 42, h: 42, swl: 3300, swl6: 4000, ft3: 48, m3: 1.36, price: 14.95, badge: "Best Seller" },
+  { l: 35, w: 35, h: 78, swl: 3300, swl6: 4000, ft3: 55, m3: 1.56, price: 15.95 },
+  { l: 44, w: 44, h: 44, swl: 4000, swl6: 4800, ft3: 57, m3: 1.61, price: 16.95 },
+  { l: 42, w: 42, h: 54, swl: 4400, swl6: 5300, ft3: 63, m3: 1.78, price: 18.5 },
+  { l: 45, w: 45, h: 45, swl: 4400, swl6: 5300, ft3: 65, m3: 1.84, price: 18.95 },
+  { l: 48, w: 48, h: 48, swl: 5000, swl6: 6000, ft3: 80, m3: 2.26, price: 21.95 },
 ];
+
+export const products: Product[] = sizes.map((s) => {
+  const dims = `${s.l}" × ${s.w}" × ${s.h}"`;
+  return {
+    slug: `standard-fibc-${s.l}x${s.w}x${s.h}`,
+    sku: `TBB-${s.l}${s.w}-${s.h}`,
+    name: `Standard FIBC ${s.l}×${s.w}×${s.h}"`,
+    category: "Standard FIBC Bulk Bags",
+    shortDescription: `${dims} U-panel bulk bag — ${s.swl.toLocaleString()} lb SWL (5:1), ${s.ft3} ft³.`,
+    description:
+      "Versatile, strong, and reliable 100% virgin polypropylene FIBC built for a wide range of industries and materials. UV-treated for long-lasting strength, with multiple top, bottom, loop, liner, and printing options available. Tested to a 5:1 safety factor (6:1 heavy-duty available).",
+    badge: s.badge,
+    inStock: true,
+    dimensions: dims,
+    baseFootprint: s.w,
+    swl: s.swl,
+    swl6: s.swl6,
+    volumeFt3: s.ft3,
+    volumeM3: s.m3,
+    safetyFactor: "5:1",
+    construction: "U-Panel",
+    topStyle: "Duffle Top",
+    bottomStyle: "Spout Bottom",
+    staticType: "Type A",
+    fabric: "100% virgin woven polypropylene (coated or uncoated)",
+    coated: false,
+    baffled: false,
+    foodGrade: false,
+    unCertified: false,
+    liftLoops: "Cross-corner (corner, U-panel, sleeve & tunnel available)",
+    uvProtection: "UV-treated",
+    priceFrom: s.price,
+  };
+});
 
 export function getProduct(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
@@ -259,15 +158,17 @@ export function relatedProducts(slug: string, count = 4): Product[] {
   return products.filter((p) => p.slug !== slug).slice(0, count);
 }
 
-// Facet option lists used by the catalog filters.
+// Facet option lists.
 export const facets = {
-  topStyle: ["Duffle Top", "Spout Top", "Open Top"] as TopStyle[],
+  // Minimum Safe Working Load (5:1) thresholds.
+  capacity: [2200, 3300, 4400] as number[],
+  // Bag width / footprint (inches).
+  footprint: [35, 39, 42, 44, 45, 48] as number[],
+  // Used by the custom quote form.
   construction: [
     "U-Panel",
     "Circular",
     "4-Panel",
     "Baffled (Q-Bag)",
   ] as Construction[],
-  swl: [2200, 3000, 4000] as number[],
-  use: ["Food Grade", "UN Certified", "Conductive"] as const,
 };

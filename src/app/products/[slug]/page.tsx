@@ -5,6 +5,7 @@ import {
   getProduct,
   products,
   relatedProducts,
+  standardFibc,
   type Product,
 } from "@/lib/products";
 import { site } from "@/lib/site";
@@ -35,18 +36,25 @@ function specRows(p: Product) {
   return [
     { label: "Base Dimensions", value: p.dimensions },
     { label: "Construction", value: p.construction },
+    {
+      label: "Safe Working Load (5:1)",
+      value: `${p.swl.toLocaleString()} lbs`,
+    },
+    p.swl6
+      ? { label: "Safe Working Load (6:1)", value: `${p.swl6.toLocaleString()} lbs` }
+      : null,
+    p.volumeFt3
+      ? {
+          label: "Volume",
+          value: `${p.volumeFt3} ft³ (${p.volumeM3} m³)`,
+        }
+      : null,
     { label: "Top Style", value: p.topStyle },
     { label: "Bottom Style", value: p.bottomStyle },
-    { label: "Safe Working Load", value: `${p.swl.toLocaleString()} lbs` },
-    { label: "Safety Factor", value: p.safetyFactor },
-    { label: "Static Type", value: p.staticType },
     { label: "Fabric", value: p.fabric },
-    { label: "Coating", value: p.coated ? "Coated (laminated)" : "Uncoated" },
     { label: "Lift Loops", value: p.liftLoops },
     { label: "UV Protection", value: p.uvProtection },
-    { label: "Food Grade", value: p.foodGrade ? "Yes" : "No" },
-    { label: "UN Certified", value: p.unCertified ? "Yes" : "No" },
-  ];
+  ].filter((r): r is { label: string; value: string } => r !== null);
 }
 
 export default async function ProductDetailPage({
@@ -182,6 +190,63 @@ export default async function ProductDetailPage({
             ))}
           </tbody>
         </table>
+      </section>
+
+      {/* Configuration options */}
+      <section className="mt-16">
+        <div className="mb-8 border-l-8 border-secondary pl-6">
+          <h2 className="font-display text-headline-lg uppercase text-primary">
+            Configuration Options
+          </h2>
+          <p className="text-body-md text-on-surface-variant">
+            Every Standard FIBC can be built to your spec. Note your choices in
+            the quote request.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            { title: "Top Options", icon: "vertical_align_top", items: standardFibc.topOptions },
+            { title: "Bottom Options", icon: "vertical_align_bottom", items: standardFibc.bottomOptions },
+            { title: "Lifting Loops", icon: "drag_handle", items: standardFibc.loopOptions },
+            { title: "Liner Options", icon: "layers", items: standardFibc.linerOptions },
+            { title: "Printing", icon: "print", items: standardFibc.printingOptions },
+            { title: "Fabric & Safety", icon: "shield", items: [...standardFibc.fabricOptions, ...standardFibc.safetyFactors] },
+          ].map((group) => (
+            <div
+              key={group.title}
+              className="border border-industrial-gray bg-white p-6 hard-shadow"
+            >
+              <h3 className="mb-3 flex items-center gap-2 text-label-bold font-bold uppercase text-secondary">
+                <Icon name={group.icon} className="text-base" /> {group.title}
+              </h3>
+              <ul className="space-y-1.5">
+                {group.items.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-2 text-body-sm text-on-surface-variant"
+                  >
+                    <Icon name="check" className="text-sm text-primary" /> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 border border-industrial-gray bg-surface-container-low p-6">
+          <h3 className="mb-3 text-label-bold font-bold uppercase text-primary">
+            Ideal for bulk materials
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {standardFibc.materials.map((m) => (
+              <span
+                key={m}
+                className="border border-industrial-gray bg-white px-3 py-1 text-body-sm text-on-surface-variant"
+              >
+                {m}
+              </span>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Related */}

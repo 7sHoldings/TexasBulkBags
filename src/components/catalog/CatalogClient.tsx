@@ -2,25 +2,18 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { facets, products as allProducts } from "@/lib/products";
+import { facets, products as allProducts, standardFibc } from "@/lib/products";
 import { ProductCard } from "@/components/ProductCard";
 import { Icon } from "@/components/ui/Icon";
 
-type Sort = "capacity" | "price" | "stock";
+type Sort = "capacity" | "price" | "volume";
 
 type Filters = {
-  topStyle: string[];
-  construction: string[];
-  swl: number[];
-  use: string[];
+  capacity: number[]; // minimum SWL thresholds
+  footprint: number[]; // bag width (in)
 };
 
-const emptyFilters: Filters = {
-  topStyle: [],
-  construction: [],
-  swl: [],
-  use: [],
-};
+const emptyFilters: Filters = { capacity: [], footprint: [] };
 
 function FilterGroup({
   title,
@@ -69,37 +62,22 @@ export function CatalogClient() {
 
   function toggle(key: keyof Filters, value: string | number) {
     setFilters((prev) => {
-      const list = prev[key] as (string | number)[];
-      const next = list.includes(value)
-        ? list.filter((v) => v !== value)
-        : [...list, value];
+      const list = prev[key];
+      const num = Number(value);
+      const next = list.includes(num)
+        ? list.filter((v) => v !== num)
+        : [...list, num];
       return { ...prev, [key]: next };
     });
   }
 
   const filtered = useMemo(() => {
     const result = allProducts.filter((p) => {
-      if (filters.topStyle.length && !filters.topStyle.includes(p.topStyle))
+      if (filters.capacity.length && p.swl < Math.min(...filters.capacity)) {
         return false;
-      if (
-        filters.construction.length &&
-        !filters.construction.includes(p.construction)
-      )
-        return false;
-      if (filters.swl.length) {
-        const matches = filters.swl.some((s) =>
-          s === 4000 ? p.swl >= 4000 : p.swl === s,
-        );
-        if (!matches) return false;
       }
-      if (filters.use.length) {
-        const useMatch = filters.use.every((u) => {
-          if (u === "Food Grade") return p.foodGrade;
-          if (u === "UN Certified") return p.unCertified;
-          if (u === "Conductive") return p.staticType === "Type C";
-          return true;
-        });
-        if (!useMatch) return false;
+      if (filters.footprint.length && !filters.footprint.includes(p.baseFootprint)) {
+        return false;
       }
       return true;
     });
@@ -107,58 +85,40 @@ export function CatalogClient() {
     return [...result].sort((a, b) => {
       if (sort === "capacity") return b.swl - a.swl;
       if (sort === "price") return a.priceFrom - b.priceFrom;
-      return Number(b.inStock) - Number(a.inStock);
+      return (b.volumeFt3 ?? 0) - (a.volumeFt3 ?? 0);
     });
   }, [filters, sort]);
 
-  const activeChips: { key: keyof Filters; value: string | number; label: string }[] =
-    [
-      ...filters.swl.map((v) => ({
-        key: "swl" as const,
-        value: v,
-        label: `SWL: ${v.toLocaleString()}${v === 4000 ? "+" : ""} lbs`,
-      })),
-      ...filters.construction.map((v) => ({
-        key: "construction" as const,
-        value: v,
-        label: v,
-      })),
-      ...filters.topStyle.map((v) => ({
-        key: "topStyle" as const,
-        value: v,
-        label: v,
-      })),
-      ...filters.use.map((v) => ({ key: "use" as const, value: v, label: v })),
-    ];
+  const activeChips: { key: keyof Filters; value: number; label: string }[] = [
+    ...filters.capacity.map((v) => ({
+      key: "capacity" as const,
+      value: v,
+      label: `SWL ≥ ${v.toLocaleString()} lbs`,
+    })),
+    ...filters.footprint.map((v) => ({
+      key: "footprint" as const,
+      value: v,
+      label: `${v}" wide`,
+    })),
+  ];
 
   const hasFilters = activeChips.length > 0;
 
   const sidebar = (
     <div className="space-y-8 p-6">
       <FilterGroup
-        title="Top Style"
-        options={facets.topStyle}
-        selected={filters.topStyle}
-        onToggle={(v) => toggle("topStyle", v)}
+        title="Min Capacity (SWL)"
+        options={facets.capacity}
+        selected={filters.capacity}
+        onToggle={(v) => toggle("capacity", v)}
+        render={(v) => `${Number(v).toLocaleString()} lbs+`}
       />
       <FilterGroup
-        title="Construction"
-        options={facets.construction}
-        selected={filters.construction}
-        onToggle={(v) => toggle("construction", v)}
-      />
-      <FilterGroup
-        title="Capacity (SWL)"
-        options={facets.swl}
-        selected={filters.swl}
-        onToggle={(v) => toggle("swl", v)}
-        render={(v) => `${Number(v).toLocaleString()}${v === 4000 ? "+" : ""} lbs`}
-      />
-      <FilterGroup
-        title="Specialty"
-        options={[...facets.use]}
-        selected={filters.use}
-        onToggle={(v) => toggle("use", v)}
+        title="Bag Width"
+        options={facets.footprint}
+        selected={filters.footprint}
+        onToggle={(v) => toggle("footprint", v)}
+        render={(v) => `${v}"`}
       />
       <button
         type="button"
@@ -179,7 +139,7 @@ export function CatalogClient() {
             Filters
           </h2>
           <p className="text-body-sm text-on-surface-variant">
-            Refine by technical specification
+            Refine by capacity and size
           </p>
         </div>
         {sidebar}
@@ -197,11 +157,17 @@ export function CatalogClient() {
         <div className="flex flex-col items-start justify-between gap-4 border-b-2 border-primary pb-6 md:flex-row md:items-end">
           <div>
             <h1 className="font-display text-headline-xl leading-tight text-primary">
-              Standard FIBC Bags
+              Standard FIBC Bulk Bags
             </h1>
             <p className="max-w-2xl text-body-lg text-on-surface-variant">
-              Heavy-duty industrial bags engineered for safe material handling in
-              agriculture, chemical, and construction sectors.
+              {standardFibc.tagline} Heavy-duty bags for agriculture, chemical,
+              construction, and more — in stock and built to your spec.
+            </p>
+            <p className="mt-2 font-display text-headline-sm text-secondary">
+              ${standardFibc.priceMin.toFixed(2)} – ${standardFibc.priceMax.toFixed(2)}
+              <span className="ml-1 text-body-sm font-normal text-on-surface-variant">
+                / bag
+              </span>
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -219,7 +185,7 @@ export function CatalogClient() {
             >
               <option value="capacity">Capacity: High to Low</option>
               <option value="price">Price: Low to High</option>
-              <option value="stock">Stock Availability</option>
+              <option value="volume">Volume: High to Low</option>
             </select>
           </div>
         </div>
@@ -256,7 +222,7 @@ export function CatalogClient() {
             ))
           ) : (
             <span className="text-body-sm text-on-surface-variant">
-              Showing all {filtered.length} configurations
+              Showing all {filtered.length} sizes
             </span>
           )}
         </div>
