@@ -219,6 +219,7 @@ export const categories: Category[] = [
     priceMax: 34.95,
     flyer: "/categories/un-certified-hazmat-bags.jpg",
     skuPrefix: "UN",
+    hasPhotos: true,
     construction: "U-Panel",
     foodGrade: false,
     baffled: false,
