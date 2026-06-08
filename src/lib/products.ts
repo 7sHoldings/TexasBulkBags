@@ -187,6 +187,7 @@ export const categories: Category[] = [
     priceMax: 34.95,
     flyer: "/categories/type-c-conductive-fibc.jpg",
     skuPrefix: "TC",
+    hasPhotos: true,
     construction: "U-Panel",
     foodGrade: false,
     baffled: false,
