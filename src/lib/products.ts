@@ -445,6 +445,19 @@ export function productsInCategory(slug: string): Product[] {
   return products.filter((p) => p.category === slug);
 }
 
+/** Representative image for a category card (a product photo, else the flyer). */
+export function categoryCardImage(cat: Category): string {
+  if (cat.hasPhotos) {
+    const items = productsInCategory(cat.slug);
+    const rep =
+      items.find((p) => p.slug.endsWith("42x42x42") && p.image) ??
+      items.find((p) => p.image) ??
+      items[0];
+    if (rep?.image) return rep.image;
+  }
+  return cat.flyer;
+}
+
 export function getProduct(slug: string): Product | undefined {
   return products.find((p) => p.slug === slug);
 }
