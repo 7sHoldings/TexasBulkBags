@@ -23,28 +23,35 @@ export async function sendLeadEmail({
   replyTo,
 }: SendArgs): Promise<{ delivered: boolean }> {
   const to = process.env.LEAD_INBOX ?? "texasbulkbags@gmail.com";
+  // LEAD_INBOX may be a comma-separated list of addresses.
+  const recipients = to
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
   // 1) SMTP (Namecheap Private Email, Gmail, etc.)
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-    return sendViaSmtp({ to, subject, text, replyTo });
+    return sendViaSmtp({ recipients, subject, text, replyTo });
   }
 
   // 2) Resend
   if (process.env.RESEND_API_KEY) {
-    return sendViaResend({ to, subject, text, replyTo });
+    return sendViaResend({ recipients, subject, text, replyTo });
   }
 
   // 3) Fallback: log
-  console.info(`[email] (not configured) → ${to}\nSubject: ${subject}\n${text}`);
+  console.info(
+    `[email] (not configured) → ${recipients.join(", ")}\nSubject: ${subject}\n${text}`,
+  );
   return { delivered: false };
 }
 
 async function sendViaSmtp({
-  to,
+  recipients,
   subject,
   text,
   replyTo,
-}: SendArgs & { to: string }): Promise<{ delivered: boolean }> {
+}: SendArgs & { recipients: string[] }): Promise<{ delivered: boolean }> {
   try {
     const nodemailer = (await import("nodemailer")).default;
     const port = Number(process.env.SMTP_PORT ?? 465);
@@ -65,7 +72,7 @@ async function sendViaSmtp({
 
     await transporter.sendMail({
       from,
-      to,
+      to: recipients,
       replyTo,
       subject,
       text,
@@ -81,11 +88,11 @@ async function sendViaSmtp({
 }
 
 async function sendViaResend({
-  to,
+  recipients,
   subject,
   text,
   replyTo,
-}: SendArgs & { to: string }): Promise<{ delivered: boolean }> {
+}: SendArgs & { recipients: string[] }): Promise<{ delivered: boolean }> {
   const from =
     process.env.EMAIL_FROM ?? "Texas Bulk Bags <onboarding@resend.dev>";
   try {
@@ -97,7 +104,7 @@ async function sendViaResend({
       },
       body: JSON.stringify({
         from,
-        to: [to],
+        to: recipients,
         subject,
         reply_to: replyTo,
         html: `<pre style="font-family:ui-monospace,monospace;font-size:14px;white-space:pre-wrap">${escapeHtml(
