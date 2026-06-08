@@ -26,27 +26,35 @@ crisp on retina screens.
 
 ---
 
-## 2. Product photos — REQUIRED (1 each), 8 total
+## 2. Product photos — Standard FIBC Bulk Bags
 
-Square masters work everywhere (catalog card = square, PDP = 4:3 cropped, thumbs
-= square). Place in `/public/products/`.
+Square masters work everywhere (catalog card = square, PDP = 4:3 cropped). Place
+in `/public/products/`, 1200×1200, JPG/WebP, white/light background.
 
-| Product | Filename | Size | Format |
-| --- | --- | --- | --- |
-| U‑Panel Spout Top (TBB‑UP‑35) | `tbb-up-35-upanel-spout.jpg` | 1200×1200 | JPG/WebP |
-| U‑Panel Duffle Top (TBB‑UP‑40) | `tbb-up-40-duffle-spout.jpg` | 1200×1200 | JPG/WebP |
-| Circular Duffle Top (TBB‑CIRC‑42) | `tbb-circ-42-duffle.jpg` | 1200×1200 | JPG/WebP |
-| Baffle Q‑Bag (TBB‑BAF‑38) | `tbb-baf-38-baffle.jpg` | 1200×1200 | JPG/WebP |
-| Food‑Grade Clean‑Room (TBB‑FG‑35) | `tbb-fg-35-foodgrade.jpg` | 1200×1200 | JPG/WebP |
-| UN‑Certified HAZMAT (TBB‑UN‑37) | `tbb-un-37-hazmat.jpg` | 1200×1200 | JPG/WebP |
-| Type C Conductive (TBB‑C‑39) | `tbb-c-39-conductive.jpg` | 1200×1200 | JPG/WebP |
-| Open Top / Flat Bottom (TBB‑OT‑44) | `tbb-ot-44-opentop-flat.jpg` | 1200×1200 | JPG/WebP |
+### Easiest: ONE shared photo (recommended)
 
-**Optional extra angles** (for the PDP gallery — needs a small code change to
-enable): `tbb-up-35-upanel-spout-2.jpg`, `-3.jpg`, etc. 2–3 per product.
+All 11 sizes are the same Standard FIBC bag, so a single good photo can be reused
+across every size. Send just:
 
-> Until a file exists for a product, it shows the bulk‑bag illustration
-> placeholder automatically — no broken images.
+| File | Used for |
+| --- | --- |
+| `standard-fibc.jpg` | all 11 Standard FIBC sizes |
+
+I'll point all sizes at it. (Send 2–3 angle variants if you want a gallery.)
+
+### Or: a photo per size
+
+If you have size‑specific shots, name them by slug:
+
+```
+standard-fibc-35x35x39.jpg   standard-fibc-35x35x47.jpg   standard-fibc-39x39x39.jpg
+standard-fibc-35x35x59.jpg   standard-fibc-39x39x51.jpg   standard-fibc-42x42x42.jpg
+standard-fibc-35x35x78.jpg   standard-fibc-44x44x44.jpg   standard-fibc-42x42x54.jpg
+standard-fibc-45x45x45.jpg   standard-fibc-48x48x48.jpg
+```
+
+> Until a photo exists, each product shows the bulk‑bag illustration placeholder
+> automatically — no broken images. (More categories will add their own slugs.)
 
 ---
 
