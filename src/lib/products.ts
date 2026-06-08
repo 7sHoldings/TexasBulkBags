@@ -141,6 +141,7 @@ export const categories: Category[] = [
     priceMax: 21.95,
     flyer: "/categories/baffle-q-bags.jpg",
     skuPrefix: "BAF",
+    hasPhotos: true,
     construction: "Baffled (Q-Bag)",
     foodGrade: false,
     baffled: true,
