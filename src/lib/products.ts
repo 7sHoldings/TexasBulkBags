@@ -87,6 +87,8 @@ export type Category = {
   benefits: { title: string; description: string }[];
   /** "fibc" = sized SKUs with the standard size grid; "woven" = spec-to-quote. */
   productType?: "fibc" | "woven";
+  /** When true, products use real photos at /products/<slug>.png. */
+  hasPhotos?: boolean;
   /** For woven/spec-to-quote categories. */
   specs?: { label: string; value: string }[];
   widthOptions?: string[];
@@ -104,6 +106,7 @@ export const categories: Category[] = [
     priceMax: 21.95,
     flyer: "/categories/standard-fibc.jpg",
     skuPrefix: "STD",
+    hasPhotos: true,
     construction: "U-Panel",
     foodGrade: false,
     baffled: false,
@@ -346,8 +349,10 @@ const unSizes: SizeRow[] = [
 function buildProducts(cat: Category, sizes: SizeRow[]): Product[] {
   return sizes.map((s) => {
     const dims = `${s.l}" × ${s.w}" × ${s.h}"`;
+    const slug = `${cat.slug}-${s.l}x${s.w}x${s.h}`;
     return {
-      slug: `${cat.slug}-${s.l}x${s.w}x${s.h}`,
+      slug,
+      image: cat.hasPhotos ? `/products/${slug}.png` : undefined,
       sku: `TBB-${cat.skuPrefix}-${s.l}${s.w}-${s.h}`,
       name: `${cat.shortName} ${s.l}×${s.w}×${s.h}"`,
       category: cat.slug,

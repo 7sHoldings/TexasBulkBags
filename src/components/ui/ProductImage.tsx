@@ -53,7 +53,9 @@ export function ProductImage({
 }) {
   return (
     <div
-      className={`relative flex items-center justify-center overflow-hidden bg-surface-container-low ${className}`}
+      className={`relative flex items-center justify-center overflow-hidden ${
+        src ? "bg-white" : "bg-surface-container-low"
+      } ${className}`}
     >
       {src ? (
         <Image
@@ -61,7 +63,7 @@ export function ProductImage({
           alt={alt ?? "Bulk bag product photo"}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover"
+          className="object-contain"
         />
       ) : (
         <>

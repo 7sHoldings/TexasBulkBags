@@ -138,14 +138,16 @@ export default async function ProductDetailPage({
               alt={product.name}
             />
           </div>
-          <div className="mt-4 grid grid-cols-4 gap-4">
-            {[0, 1, 2, 3].map((i) => (
-              <ProductImage
-                key={i}
-                className="aspect-square border border-industrial-gray"
-              />
-            ))}
-          </div>
+          {!product.image && (
+            <div className="mt-4 grid grid-cols-4 gap-4">
+              {[0, 1, 2, 3].map((i) => (
+                <ProductImage
+                  key={i}
+                  className="aspect-square border border-industrial-gray"
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Summary + actions */}
