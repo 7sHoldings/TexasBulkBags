@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
+  bagOptions,
+  getCategory,
   getProduct,
   products,
   relatedProducts,
-  standardFibc,
   type Product,
 } from "@/lib/products";
 import { site } from "@/lib/site";
@@ -66,6 +67,7 @@ export default async function ProductDetailPage({
   const product = getProduct(slug);
   if (!product) notFound();
 
+  const category = getCategory(product.category);
   const related = relatedProducts(slug, 4);
   const attributes = [
     { icon: "dashboard", label: product.construction },
@@ -108,6 +110,10 @@ export default async function ProductDetailPage({
           Bulk Bags
         </Link>
         <Icon name="chevron_right" className="text-sm" />
+        <Link href={`/products#${product.category}`} className="hover:text-secondary">
+          {category?.name ?? "Catalog"}
+        </Link>
+        <Icon name="chevron_right" className="text-sm" />
         <span className="font-bold text-primary">{product.name}</span>
       </nav>
 
@@ -139,7 +145,7 @@ export default async function ProductDetailPage({
         {/* Summary + actions */}
         <div>
           <span className="text-label-bold font-bold uppercase tracking-widest text-secondary">
-            Heavy-Duty FIBC · {product.sku}
+            {category?.name ?? "FIBC"} · {product.sku}
           </span>
           <h1 className="mt-2 font-display text-headline-xl leading-tight text-primary">
             {product.name}
@@ -205,12 +211,12 @@ export default async function ProductDetailPage({
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { title: "Top Options", icon: "vertical_align_top", items: standardFibc.topOptions },
-            { title: "Bottom Options", icon: "vertical_align_bottom", items: standardFibc.bottomOptions },
-            { title: "Lifting Loops", icon: "drag_handle", items: standardFibc.loopOptions },
-            { title: "Liner Options", icon: "layers", items: standardFibc.linerOptions },
-            { title: "Printing", icon: "print", items: standardFibc.printingOptions },
-            { title: "Fabric & Safety", icon: "shield", items: [...standardFibc.fabricOptions, ...standardFibc.safetyFactors] },
+            { title: "Top Options", icon: "vertical_align_top", items: bagOptions.topOptions },
+            { title: "Bottom Options", icon: "vertical_align_bottom", items: bagOptions.bottomOptions },
+            { title: "Lifting Loops", icon: "drag_handle", items: bagOptions.loopOptions },
+            { title: "Liner Options", icon: "layers", items: bagOptions.linerOptions },
+            { title: "Printing", icon: "print", items: bagOptions.printingOptions },
+            { title: "Fabric & Safety", icon: "shield", items: [...bagOptions.fabricOptions, ...bagOptions.safetyFactors] },
           ].map((group) => (
             <div
               key={group.title}
@@ -237,7 +243,7 @@ export default async function ProductDetailPage({
             Ideal for bulk materials
           </h3>
           <div className="flex flex-wrap gap-2">
-            {standardFibc.materials.map((m) => (
+            {(category?.materials ?? []).map((m) => (
               <span
                 key={m}
                 className="border border-industrial-gray bg-white px-3 py-1 text-body-sm text-on-surface-variant"
