@@ -56,7 +56,7 @@ export default function FoodSafetyPage() {
           </section>
         ))}
 
-        <div className="flex flex-col items-start justify-between gap-4 border border-industrial-gray bg-surface-container-highest p-8 md:flex-row md:items-center">
+        <div className="flex flex-col items-start justify-between gap-4 border border-industrial-gray bg-surface-container-highest p-6 sm:p-8 md:flex-row md:items-center">
           <div>
             <h2 className="font-display text-headline-sm uppercase text-primary">
               Need food-grade bags?

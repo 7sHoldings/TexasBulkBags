@@ -77,12 +77,23 @@
 
 html {
   scroll-behavior: smooth;
+  /* Guard against accidental horizontal scroll on mobile (no sticky elements
+     in the app, so clip is safe and side-effect free). */
+  overflow-x: clip;
 }
 
 body {
   background-color: var(--color-surface);
   color: var(--color-on-surface);
   font-family: var(--font-sans);
+}
+
+/* Media never forces the viewport wider than the screen. */
+img,
+svg,
+video,
+table {
+  max-width: 100%;
 }
 
 /* Display font for headings */

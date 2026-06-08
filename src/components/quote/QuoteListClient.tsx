@@ -56,7 +56,7 @@ export function QuoteListClient() {
   if (status === "success") {
     return (
       <div className="px-margin-mobile py-16 md:px-8">
-        <div className="mx-auto max-w-xl border border-industrial-gray bg-white p-12 text-center hard-shadow">
+        <div className="mx-auto max-w-xl border border-industrial-gray bg-white p-8 text-center hard-shadow sm:p-12">
           <div className="mx-auto flex h-16 w-16 items-center justify-center bg-secondary">
             <Icon name="check" className="text-4xl text-white" />
           </div>

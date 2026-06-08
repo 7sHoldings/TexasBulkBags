@@ -41,7 +41,7 @@ export function ContactForm() {
 
   if (status === "success") {
     return (
-      <div className="flex flex-col items-start border border-industrial-gray bg-white p-8 hard-shadow">
+      <div className="flex flex-col items-start border border-industrial-gray bg-white p-6 hard-shadow sm:p-8">
         <div className="flex h-12 w-12 items-center justify-center bg-secondary">
           <Icon name="check" className="text-3xl text-white" />
         </div>

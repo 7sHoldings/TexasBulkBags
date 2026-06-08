@@ -37,7 +37,7 @@ export default function ProductsPage() {
         ))}
       </div>
 
-      <div className="space-y-16">
+      <div className="space-y-12 sm:space-y-16">
         {categories.map((cat) => {
           const items = productsInCategory(cat.slug);
           return (
@@ -109,10 +109,10 @@ export default function ProductsPage() {
                             key={s.label}
                             className={i % 2 ? "bg-surface-container-low" : "bg-white"}
                           >
-                            <th className="w-1/2 border-b border-industrial-gray px-6 py-3 text-label-bold font-bold uppercase text-on-surface-variant">
+                            <th className="w-1/2 border-b border-industrial-gray px-4 py-3 text-label-bold font-bold uppercase text-on-surface-variant sm:px-6">
                               {s.label}
                             </th>
-                            <td className="border-b border-industrial-gray px-6 py-3 font-bold text-primary">
+                            <td className="border-b border-industrial-gray px-4 py-3 font-bold text-primary sm:px-6">
                               {s.value}
                             </td>
                           </tr>
@@ -163,7 +163,7 @@ export default function ProductsPage() {
       </div>
 
       {/* Custom CTA */}
-      <div className="mt-16 flex flex-col items-start justify-between gap-4 border border-industrial-gray bg-surface-container-highest p-8 md:flex-row md:items-center">
+      <div className="mt-16 flex flex-col items-start justify-between gap-4 border border-industrial-gray bg-surface-container-highest p-6 sm:p-8 md:flex-row md:items-center">
         <div>
           <h2 className="font-display text-headline-md uppercase text-primary">
             Need a custom size or configuration?

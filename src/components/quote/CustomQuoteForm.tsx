@@ -84,7 +84,7 @@ export function CustomQuoteForm() {
 
   if (status === "success") {
     return (
-      <div className="border border-industrial-gray bg-white p-12 text-center hard-shadow">
+      <div className="border border-industrial-gray bg-white p-8 text-center hard-shadow sm:p-12">
         <div className="mx-auto flex h-16 w-16 items-center justify-center bg-secondary">
           <Icon name="check" className="text-4xl text-white" />
         </div>
@@ -349,7 +349,7 @@ export function CustomQuoteForm() {
           </div>
           <div>
             <Label>Technical Drawings (optional)</Label>
-            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 border-2 border-dashed border-industrial-gray bg-surface-container-low p-8 text-center hover:border-primary">
+            <label className="flex cursor-pointer flex-col items-center justify-center gap-2 border-2 border-dashed border-industrial-gray bg-surface-container-low p-6 text-center sm:p-8 hover:border-primary">
               <Icon name="cloud_upload" className="text-3xl text-outline" />
               <span className="text-body-sm text-on-surface-variant">
                 {fileName ?? "Drag & drop or browse — PDF, DXF, JPG up to 25MB"}

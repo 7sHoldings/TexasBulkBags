@@ -108,7 +108,7 @@ export default async function ArticlePage({
           {article.body.map(renderBlock)}
         </div>
 
-        <div className="mt-12 flex flex-col items-start justify-between gap-4 border border-industrial-gray bg-surface-container-highest p-8 md:flex-row md:items-center">
+        <div className="mt-12 flex flex-col items-start justify-between gap-4 border border-industrial-gray bg-surface-container-highest p-6 sm:p-8 md:flex-row md:items-center">
           <div>
             <h2 className="font-display text-headline-sm uppercase text-primary">
               Need help speccing a bag?

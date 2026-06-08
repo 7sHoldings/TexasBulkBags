@@ -194,10 +194,10 @@ export default async function ProductDetailPage({
                 key={row.label}
                 className={i % 2 === 0 ? "bg-white" : "bg-surface-container-low"}
               >
-                <th className="w-1/2 border-b border-industrial-gray px-6 py-3 text-label-bold font-bold uppercase text-on-surface-variant">
+                <th className="w-1/2 border-b border-industrial-gray px-4 py-3 text-label-bold font-bold uppercase text-on-surface-variant sm:px-6">
                   {row.label}
                 </th>
-                <td className="border-b border-industrial-gray px-6 py-3 font-bold text-primary">
+                <td className="border-b border-industrial-gray px-4 py-3 font-bold text-primary sm:px-6">
                   {row.value}
                 </td>
               </tr>
