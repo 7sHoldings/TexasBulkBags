@@ -9,31 +9,90 @@ type SendArgs = {
 /**
  * Sends a notification email to the company inbox.
  *
- * Uses Resend's REST API when RESEND_API_KEY is configured (no SDK dependency).
- * When it isn't set, the message is logged to the server so submissions are
- * never silently lost in development or before the provider is wired up.
+ * Transport priority:
+ *   1. SMTP (e.g. Namecheap Private Email) when SMTP_HOST/USER/PASS are set.
+ *   2. Resend REST API when RESEND_API_KEY is set.
+ *   3. Otherwise the message is logged to the server so submissions are never
+ *      silently lost before a provider is configured.
+ *
+ * See docs/EMAIL-SETUP.md for setup with Namecheap or Resend.
  */
 export async function sendLeadEmail({
   subject,
   text,
   replyTo,
 }: SendArgs): Promise<{ delivered: boolean }> {
-  const apiKey = process.env.RESEND_API_KEY;
-  // Internal inbox that receives quote/order/contact leads. Overridable via
-  // the LEAD_INBOX env var; defaults to the company's lead address.
   const to = process.env.LEAD_INBOX ?? "texasbulkbags@gmail.com";
-  const from = process.env.EMAIL_FROM ?? "Texas Bulk Bags <onboarding@resend.dev>";
 
-  if (!apiKey) {
-    console.info(`[email] (not configured) → ${to}\nSubject: ${subject}\n${text}`);
-    return { delivered: false };
+  // 1) SMTP (Namecheap Private Email, Gmail, etc.)
+  if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    return sendViaSmtp({ to, subject, text, replyTo });
   }
 
+  // 2) Resend
+  if (process.env.RESEND_API_KEY) {
+    return sendViaResend({ to, subject, text, replyTo });
+  }
+
+  // 3) Fallback: log
+  console.info(`[email] (not configured) → ${to}\nSubject: ${subject}\n${text}`);
+  return { delivered: false };
+}
+
+async function sendViaSmtp({
+  to,
+  subject,
+  text,
+  replyTo,
+}: SendArgs & { to: string }): Promise<{ delivered: boolean }> {
+  try {
+    const nodemailer = (await import("nodemailer")).default;
+    const port = Number(process.env.SMTP_PORT ?? 465);
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port,
+      secure: port === 465, // 465 = SSL, 587 = STARTTLS
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    // Most SMTP hosts (incl. Namecheap) require From to be the authenticated mailbox.
+    const from =
+      process.env.EMAIL_FROM ??
+      `Texas Bulk Bags <${process.env.SMTP_USER}>`;
+
+    await transporter.sendMail({
+      from,
+      to,
+      replyTo,
+      subject,
+      text,
+      html: `<pre style="font-family:ui-monospace,monospace;font-size:14px;white-space:pre-wrap">${escapeHtml(
+        text,
+      )}</pre>`,
+    });
+    return { delivered: true };
+  } catch (err) {
+    console.error("[email] SMTP send failed:", err);
+    return { delivered: false };
+  }
+}
+
+async function sendViaResend({
+  to,
+  subject,
+  text,
+  replyTo,
+}: SendArgs & { to: string }): Promise<{ delivered: boolean }> {
+  const from =
+    process.env.EMAIL_FROM ?? "Texas Bulk Bags <onboarding@resend.dev>";
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -46,15 +105,13 @@ export async function sendLeadEmail({
         )}</pre>`,
       }),
     });
-
     if (!res.ok) {
-      const body = await res.text();
-      console.error(`[email] Resend error ${res.status}: ${body}`);
+      console.error(`[email] Resend error ${res.status}: ${await res.text()}`);
       return { delivered: false };
     }
     return { delivered: true };
   } catch (err) {
-    console.error("[email] send failed:", err);
+    console.error("[email] Resend send failed:", err);
     return { delivered: false };
   }
 }

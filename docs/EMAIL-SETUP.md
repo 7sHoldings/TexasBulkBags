@@ -4,10 +4,44 @@ The site already sends every **Custom Quote**, **Order Request**, and **Contact*
 submission to your inbox — it just needs one API key to actually deliver mail.
 Leads go to **texasbulkbags@gmail.com**.
 
-Until the key is set, submissions are NOT lost: they're written to the Vercel
+Until a provider is set, submissions are NOT lost: they're written to the Vercel
 function logs (Project → Logs), and the form still confirms success to the user.
 
-## Fastest path (free, no domain needed) — ~5 minutes
+You can use **either** Namecheap (Option A) **or** Resend (Option B). If both are
+configured, SMTP/Namecheap wins.
+
+---
+
+## Option A — Namecheap Private Email (SMTP)
+
+Use this if you have (or buy) **Namecheap Private Email** — a mailbox like
+`info@texasbulkbags.com`. (A plain domain registration does NOT include email;
+Private Email is a low-cost add-on in your Namecheap account.)
+
+1. **Get a mailbox:** Namecheap dashboard → **Private Email** → create/confirm a
+   mailbox, e.g. `info@texasbulkbags.com`, and note its password. Make sure the
+   required MX/SPF/DKIM records are applied (Namecheap adds these automatically
+   when the domain and email are both at Namecheap).
+2. **Add these Environment Variables in Vercel** (Project `texas-bulk-bags` →
+   Settings → Environment Variables), for all environments:
+   - `SMTP_HOST` = `mail.privateemail.com`
+   - `SMTP_PORT` = `465`
+   - `SMTP_USER` = `info@texasbulkbags.com`  (your full mailbox address)
+   - `SMTP_PASS` = the mailbox password
+   - `EMAIL_FROM` = `Texas Bulk Bags <info@texasbulkbags.com>`
+   - `LEAD_INBOX` = `texasbulkbags@gmail.com` (or `info@texasbulkbags.com` to keep
+     it all on Namecheap)
+3. **Redeploy** (Deployments → latest → Redeploy, or push to `main`).
+4. **Test:** submit the Custom Quote form on the live site — the email arrives at
+   `LEAD_INBOX` within a minute. **Reply** goes to the customer.
+
+> Notes: SMTP `From` must equal `SMTP_USER` (the authenticated mailbox) — that's
+> why `EMAIL_FROM` uses the same address. Namecheap also supports port `587`
+> (STARTTLS); if you use it, set `SMTP_PORT=587`.
+
+---
+
+## Option B — Resend (free, no domain needed) — ~5 minutes
 
 This uses [Resend](https://resend.com). With Resend's built-in test sender you
 can receive mail at the **exact email you sign up with**, so sign up with
